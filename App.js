@@ -1,25 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import StackBars from "./src/navigation/stack"
+import { StyleSheet, SafeAreaView } from 'react-native';
+import ScreensStack from "./src/navigation/stack.tsx"
+import ApSafeAreaView from "./src/components/safeAreaView/safeAreaProvider.tsx"
 
 
 
 export default function App() {
   return (
-    <View className="flex-1 bg-white items-center justify-center" >
-      <Text >Open up App.js to start working on you
-      </Text>
-      <StatusBar style="auto" />
-      <StackBars />
-    </View>
-  );
+    <SafeAreaView style={styles.container}>
+      <ScreensStack />
+    </SafeAreaView>
+
+
+  )
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+});
+
+
+
+

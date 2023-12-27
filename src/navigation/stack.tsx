@@ -1,19 +1,34 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from "@react-navigation/native";
+import React from "react"
+import Welcome1 from "../modules/Onboard/components/welcome1"
+import Welcome2 from "../modules/Onboard/components/welcome2"
+import SignInScreen from '../modules/auth/signin/screen';
 
-const StackBars = () => {
+const Stack = createNativeStackNavigator();
+
+function ScreensStack() {
     return (
-        <View>
-            <Text style={{
-                fontFamily: "Roboto", fontSize: 15,
-                marginVertical: 8,
-                fontWeight: "bold",
-                marginLeft: 10
-            }}>stack </Text>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="SignIn">
+                <Stack.Screen
+                    name="Welcome1"
+                    component={Welcome1}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Welcome2"
+                    component={Welcome2}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="SignIn"
+                    component={SignInScreen}
+                    options={{ headerShown: false }}
+                />
 
-        </View>
-    )
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 }
-
-export default StackBars;
-
+export default ScreensStack;
