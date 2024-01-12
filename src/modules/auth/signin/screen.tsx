@@ -1,73 +1,85 @@
-import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ApTitle from '../../../components/topography/title'
 import ApTextInput from '../../../components/input'
 import { Formik, FormikProps } from 'formik'
-import ApButton from '../../../components/buttons'
-import { Slider } from '@rneui/base/dist/Slider'
+import { ApBackButton, ApHeader } from '../../../components/header'
+import { ApButton } from '../../../components'
+import { theme } from '../../../constants/theme'
+import ApSubtitle from '../../../components/topography/subtitle'
 
-const SignInScreen = () => {
+const SigninScreen = ({ navigation }) => {
+
 
     const handleSubmit = () => {
         console.log("submit")
     }
     return (
         <SafeAreaView>
+
+
             <View>
-                <ImageBackground source={require("../../../../assets/Pattern1.png")} style={styles.backgroundImage} />
 
-            </View>
-            <View className='flex justify-center m-0 items-center mt-20'>
-                <View>
-                    <Image source={require("../../../../assets/Logo.png")} />
-                </View>
-                <ApTitle >Log Into Your Account</ApTitle>
+                <View className='flex justify-center m-0 items-center mt-20'>
 
-                <Formik className="w-full"
-                    // validationSchema={FormSchema}
-                    onSubmit={handleSubmit}
-                    initialValues={{ email: "", password: "" }}
-                >
-                    {(props: FormikProps<any>) => (
+                    <ApTitle >Sign In</ApTitle>
+                    <ApSubtitle>Welcome to LightBoard</ApSubtitle>
 
-                        <>
-                            <ApTextInput
-                                placeholder='Email'
-                                name="email"
-                                formikProps={props}
-                            />
 
-                            <ApTextInput
-                                placeholder="Password"
-                                name="password"
-                                formikProps={props}
-                            />
-                            {/* 
-                            <View>
-                                <ApTitle>Or Continue with</ApTitle>
+                    <Formik className="w-full"
+                        // validationSchema={FormSchema}
+                        onSubmit={handleSubmit}
+                        initialValues={{ email: "", password: "" }}
+                    >
+                        {(props: FormikProps<any>) => (
+
+                            <>
+                                <ApTextInput
+                                    label="Email"
+                                    placeholder='Email'
+                                    name="email"
+                                    formikProps={props}
+                                />
+
+                                <ApTextInput
+                                    label="Password"
+                                    placeholder="Password"
+                                    name="password"
+                                    formikProps={props}
+                                />
+
+                                <View className='my-2'>
+                                    <ApButton
+                                        label='Log In'
+                                        type="primary"
+                                        round="lg" />
+                                </View>
                                 <View>
-                                    <ApButton 
-                                    name="home" title='facebook' type="font-awesome" />
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.navigate("MainStack")
+                                        }}>
+                                        <Text className='text-center text-red-200'>
+                                            Don't have an account yet?</Text>
+                                    </TouchableOpacity>
+
 
                                 </View>
-                            </View> */}
-                            <View className='my-6'>
-                                <ApButton title="Submit" />
 
-                            </View>
+                            </>
 
-                        </>
-
-                    )}
-                </Formik>
+                        )}
+                    </Formik>
+                </View>
             </View>
+
 
         </SafeAreaView>
     )
 }
 
-export default SignInScreen
+export default SigninScreen
 
 const styles = StyleSheet.create({
     backgroundImage: {

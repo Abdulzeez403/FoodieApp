@@ -4,12 +4,11 @@
     "slug": "foodieApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/LB.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Logo.png",
-      "backgroundColor": "#ffffff",
-      "backgroundImage": "./assets/Pattern1.png"
+      "image": "./assets/LIGHTBOARD.png",
+      "backgroundColor": "#1E90FF"
     },
     "assetBundlePatterns": [
       "**/*"

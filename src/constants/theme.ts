@@ -1,6 +1,9 @@
 //App Color
 const colors = {
-  mainColor: "#0000",
+  mainColor: "#FFFFF0",
+  textColor: "#FFFFF0",
+  buttonPrimaryColor: "#1E90FF",
+  buttonSecondaryColor: "",
 };
 
 //App Fonts
@@ -53,15 +56,20 @@ const fonts = {
 };
 
 //App Screens
-const screens = {
+const screens: any = {
   //OnBoarding
+  TabNavigator: "TabNavigator",
+  OnBoardingScreen: "OnBoarding",
 
   //Home
-  HomeScreen: "HomeScreen",
+  HomeScreen: "Home",
+  CourseScreen: "Course",
+  ProfileScreen: "Profile",
+  CourseDetailScreen: "CourseDetail",
 
   //Authentication
-  SignupScreen: "SignupScreen",
-  SigninScreen: "SigninScreen",
+  SignupScreen: "SignUp",
+  SigninScreen: "SignIn",
 };
 
 const theme = { colors, fonts, screens };

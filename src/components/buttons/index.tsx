@@ -1,53 +1,99 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { Button } from '@rneui/themed';
-
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface IProps {
-    title?: string,
-    onPress?: () => void,
-    name?: string,
-    type?: string,
-    size?: "sm" | "md" | "lg",
-    color?: string,
-    iconPosition?: "right" | "left" | "top" | "bottom",
-    IconSize?: number,
-    loading?: boolean
-
+    label: string;
+    disabled?: boolean;
+    round?: "" | "sm" | "md" | "lg";
+    type?: "primary" | "secondary" | "link" | "black"; //| "light"
+    onPress?: () => void;
 }
 
-const ApButton = ({ title, onPress, name, type, size = "sm", color,
-    iconPosition = "left", IconSize, loading = false }: IProps) => {
+export const ApButton: React.FC<IProps> = ({
+    label,
+    onPress,
+    disabled,
+    round = "",
+    type = "primary",
+}) => {
     return (
-        <Button
-            title={title}
+        <TouchableOpacity
             onPress={onPress}
-            size={size}
-            loading={loading}
-            iconPosition={iconPosition}
-            iconContainerStyle={{ marginLeft: 10, marginRight: -10 }}
-            icon={{
-                name: name,
-                type: type,
-                size: IconSize,
-                color: color,
-            }}
-            buttonStyle={{ backgroundColor: "green" }}
-            containerStyle={{
-                height: 200,
-                width: 200,
-                marginHorizontal: 10,
-                marginVertical: 10,
-                borderRadius: 5
-            }}
-            titleStyle={{
-                color: 'white',
-                marginHorizontal: 20,
-            }}
-        />
-    )
-}
+            disabled={disabled}
+            style={[styles.button, styles[`round_${round}`], style[type].button]}
+        >
+            <Text style={{ ...style[type].text }}>{label}</Text>
+        </TouchableOpacity>
+    );
+};
 
-export default ApButton
+const style = {
+    primary: StyleSheet.create({
+        button: {
+            backgroundColor: "green",
+            width: 320,
 
-const styles = StyleSheet.create({})
+        },
+        text: {
+            color: "white",
+        },
+    }),
+    secondary: StyleSheet.create({
+        button: {
+            backgroundColor: "rgb(1, 147, 179)",
+            width: 320,
+        },
+        text: {
+            color: "white",
+        },
+    }),
+    link: StyleSheet.create({
+        button: {
+            backgroundColor: "white",
+            marginTop: 0,
+        },
+        text: {
+            color: "blue",
+        },
+    }),
+
+    black: StyleSheet.create({
+        button: {
+            backgroundColor: "white",
+            marginTop: 0,
+            borderWidth: 1,
+            borderColor: "grey",
+            padding: 4,
+            height: 35,
+            marginLeft: 6,
+        },
+        text: {
+            color: "grey",
+        },
+    }),
+};
+
+const styles = StyleSheet.create({
+    container: { padding: 5 },
+    text: {
+        textAlign: "center",
+        color: "white",
+    },
+    button: {
+        padding: 10,
+        height: 50,
+        marginTop: 20,
+        display: "flex",
+        alignItems: "center",
+    },
+    round_: {},
+    round_sm: {
+        borderRadius: 2,
+    },
+    round_md: {
+        borderRadius: 4,
+    },
+    round_lg: {
+        borderRadius: 6,
+    },
+});

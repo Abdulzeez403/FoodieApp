@@ -1,6 +1,7 @@
 import React from 'react'
 // import { Text } from '@rneui/themed';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
+import { theme } from "../../constants/theme"
 
 
 interface IProps {
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
     textStyle: {
         fontWeight: "normal",
         fontSize: 16,
-        textAlign: "center"
+        textAlign: "center",
+        // fontFamily: theme.fonts.Montserrat_500Medium,
     }
 })

@@ -1,6 +1,5 @@
 import { ActivityIndicator, StyleSheet } from 'react-native'
 import React from 'react'
-import { Image } from '@rneui/themed';
 
 interface IProps {
     imgURL: string
