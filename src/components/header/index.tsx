@@ -35,7 +35,7 @@ export const ApHeader: React.FC<IProps> = memo(
                     <View style={styles.header}>
                         {left}
 
-                        <View><Text>{title}</Text></View>
+                        <View><Text style={{ fontSize: 20, fontWeight: "600" }}>{title}</Text></View>
 
                         {right}
                     </View>
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         borderBottomColor: "#F5F5F5",
         borderBottomWidth: 10,
+        marginTop: 13
     },
     title: {
         textAlign: "center",

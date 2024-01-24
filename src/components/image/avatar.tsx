@@ -1,36 +1,33 @@
-// import React from 'react';
-// import { View, Image, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Image, StyleSheet } from 'react-native';
+
+interface IProps {
+    source: any,
+    className?: any
+}
 
 
-// interface IProps {
-//     img: string,
-// }
+const RoundedImage = ({ source, className }: IProps) => {
+    return (
+        <View style={[styles.container, className]}>
+            <Image style={styles.image} source={source} />
+        </View>
+    );
+};
 
-// const ApAvatar = ({ img }: IProps) => {
-//     return (
-//         <View style={styles.avatarContainer}>
-//             <Image
-//                 style={styles.avatar}
-//                 source={img}
-//             />
-//         </View>
-//     );
-// };
+const styles = StyleSheet.create({
+    container: {
+        width: 30, // Set your desired width
+        height: 30, // Set your desired height
+        borderRadius: 25, // Half of the width and height to make it circular
+        overflow: 'hidden', // Clip the content to the rounded shape
+    },
+    image: {
+        flex: 1, // Make the image take the full size of the container
+        width: null, // Set width to null to fill the container width
+        height: null, // Set height to null to fill the container height
+        resizeMode: 'cover', // Maintain the aspect ratio of the image
+    },
+});
 
-// const styles = StyleSheet.create({
-//     avatarContainer: {
-//         width: 100,
-//         height: 100,
-//         borderRadius: 50,
-//         overflow: 'hidden',
-//         borderWidth: 2,
-//         borderColor: 'white', // You can set the border color to match your app's theme
-//     },
-//     avatar: {
-//         flex: 1,
-//         width: null,
-//         height: null,
-//     },
-// });
-
-// export default ApAvatar;
+export default RoundedImage;

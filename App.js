@@ -2,6 +2,7 @@ import { StyleSheet, SafeAreaView } from 'react-native';
 import ScreensStack from "./src/navigation/stack.tsx"
 import { useFonts } from 'expo-font'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthProvider } from './src/context.tsx';
 
 
 
@@ -28,8 +29,12 @@ export default function App() {
     //   }
     return (
         <SafeAreaProvider >
-            <ScreensStack />
+            <AuthProvider>
+                <ScreensStack />
+            </AuthProvider>
+
         </SafeAreaProvider>
+
 
 
 

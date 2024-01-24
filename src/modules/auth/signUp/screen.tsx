@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, ToastAndroid } from 'react-native'
 import React from 'react'
 import ApTextInput from '../../../components/input'
 import { Formik, FormikProps } from 'formik'
@@ -7,11 +7,20 @@ import { ApButton } from '../../../components'
 import ApTitle from '../../../components/topography/title'
 import ApSubtitle from '../../../components/topography/subtitle'
 import { theme } from '../../../constants/theme'
+import { useAuthContext } from '../../../context'
 
 const SignupScreen = ({ navigation }) => {
 
-    const handleSubmit = () => {
-        console.log("submit")
+    const { signUp, loading } = useAuthContext()
+
+    const handleSubmit = async (payload: any) => {
+        try {
+            await signUp(payload);
+            ToastAndroid.show('You are welcome', ToastAndroid.SHORT);
+            navigation.navigate('SignUp');
+        } catch (error) {
+            console.error(error);
+        }
     }
     return (
         <ApSafeAreaProvider>
@@ -24,21 +33,21 @@ const SignupScreen = ({ navigation }) => {
                 <Formik className=""
                     // validationSchema={FormSchema}
                     onSubmit={handleSubmit}
-                    initialValues={{ email: "", password: "" }}
+                    initialValues={{ firstName: "", lastName: "", email: "", password: "" }}
                 >
                     {(props: FormikProps<any>) => (
                         <>
                             <ApTextInput
                                 label="FirstName"
                                 placeholder='Teacher1'
-                                name="email"
+                                name="firstName"
                                 formikProps={props}
                             />
 
                             <ApTextInput
                                 label="LastName"
                                 placeholder="lastName"
-                                name="password"
+                                name="lastName"
                                 formikProps={props}
                             />
                             <ApTextInput
@@ -56,7 +65,8 @@ const SignupScreen = ({ navigation }) => {
 
                             <View className='my-2'>
                                 <ApButton
-                                    label='Submit'
+                                    onPress={props.handleSubmit}
+                                    label={loading ? 'Submit...' : "Submit"}
                                     type="primary"
                                     round="lg" />
 

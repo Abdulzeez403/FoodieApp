@@ -11,7 +11,7 @@ export const CourseItem = ({ course }: Props) => {
         <View style={{ flexDirection: "row", gap: 20, marginVertical: 4 }} >
             <View >
                 <Image source={course?.image}
-                    resizeMode="cover"
+                    resizeMode="contain"
                     style={{ width: 110, backgroundColor: "red", height: 110, borderRadius: 20 }} />
             </View>
             <View>

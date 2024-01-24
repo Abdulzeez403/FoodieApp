@@ -1,7 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { screens } from '../modules/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -51,14 +52,30 @@ const MainStack = () => (
 
 
 
-const ScreensStack = () => (
-    <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="AuthStack" component={AuthStack} />
-            <Stack.Screen name="MainStack" component={MainStack} />
-        </Stack.Navigator>
-    </NavigationContainer>
-);
+const ScreensStack = () => {
+    const [current, setCurrent] = useState()
+    useEffect(() => {
+        const currentUser = AsyncStorage.getItem('user');
+        setCurrent(currentUser as any)
+        console.log(currentUser)
+    }, [])
+
+
+    return (
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                {current ? (
+                    <Stack.Screen name="MainStack" component={MainStack} />
+
+                ) : (
+                    <Stack.Screen name="AuthStack" component={AuthStack} />
+
+                )}
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
+
+};
 // function ScreensStack() {
 //     return (
 //         <NavigationContainer>

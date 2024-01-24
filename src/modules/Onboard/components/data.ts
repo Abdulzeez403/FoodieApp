@@ -21,14 +21,14 @@ const data: OnboardingData[] = [
     animation: require("../../../../assets/animations/student.json"),
     text: "Empower your teaching. Inspire, guide, collaborate.",
     textColor: "#00000",
-    backgroundColor: "blue",
+    backgroundColor: "#997950",
   },
   {
     id: 3,
     animation: require("../../../../assets/animations/student.json"),
     text: "Join the adventure! Stay connected, nurture learning",
     textColor: "#00000",
-    backgroundColor: "red",
+    backgroundColor: "grey",
   },
 ];
 

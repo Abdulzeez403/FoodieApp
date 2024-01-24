@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "foodieApp",
-    "slug": "foodieApp",
+    "name": "lightBoard",
+    "slug": "lightBoard",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/LB.png",
