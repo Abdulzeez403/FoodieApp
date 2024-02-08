@@ -2,16 +2,17 @@
 const colors = {
   mainColor: "#FFFFF0",
   textColor: "#FFFFF0",
-  buttonPrimaryColor: "#1E90FF",
+  primaryColor: "#1E90FF",
   buttonSecondaryColor: "",
 };
 
 //App Fonts
 const fonts = {
   H1: {
-    // fontFamily: "Inter-Bold",
-    fontSize: 32,
+    fontFamily: "Montserrat-Medium",
+    fontSize: 28,
     lineHeight: 32 * 1.3,
+    color: "white",
   },
   H2: {
     // fontFamily: "Inter-Bold",
@@ -66,6 +67,8 @@ const screens: any = {
   CourseScreen: "Course",
   ProfileScreen: "Profile",
   CourseDetailScreen: "CourseDetail",
+  ContentScreen: "ContentScreen",
+  BookMarkScreen: "BookMark",
 
   //Authentication
   SignupScreen: "SignUp",

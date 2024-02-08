@@ -14,7 +14,7 @@ export const ApBackButton = () => {
     const navigation = useNavigation();
 
     return (
-        <View className="bg-green-200 text-white rounded-md">
+        <View className="">
 
             <ApIcon
                 size={32}

@@ -1,32 +1,47 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Button } from 'react-native'
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from "../../constants/theme"
 import { ApSearchInput } from '../../components/input/searchInput';
 import { ApIcon } from '../../components/icon';
 import { courses } from "../../data"
-import { CourseItem } from '../course/components/courseItem';
 import { HomeCourseItem } from './components/courseItem';
 import RoundedImage from '../../components/image/avatar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+interface IButtonCategory {
+    name: string,
+    iconName: string,
+    iconType: any
+}
 
 const HomeScreen = ({ navigation }) => {
 
-    const buttons = [
+    const buttons: IButtonCategory[] = [
         {
             name: "Courses",
-            img: require("../../../assets/Notify.png")
+            iconName: "book",
+            iconType: "AntDesign"
+
+        },
+        {
+            name: " Anouncement",
+            iconName: "notification",
+            iconType: "AntDesign"
+
         },
         {
             name: "LiveClass",
-            img: require("../../../assets/anouncement.png")
-        },
-        {
-            name: "Anouncement",
-            img: "../../../ assets / Notify.png"
+            iconName: "live-tv",
+            iconType: "MaterialIcons"
+
+
         },
         {
             name: "Notifications",
-            img: "../../../ assets / Notify.png"
+            iconName: "notifications-outline",
+            iconType: "Ionicons"
+
+
         }
 
 
@@ -47,10 +62,14 @@ const HomeScreen = ({ navigation }) => {
 
                 <View>
 
-                    <Text style={{ fontSize: 32, color: "white", }}>
+                    {/* <Text style={{ fontSize: 32, color: "white", fontFamily:theme.fonts.Montserrat_500Medium }}>
+                        Welcome, Sodiq
+                    </Text> */}
+                    <Text style={theme.fonts.H1}>
                         Welcome, Sodiq
                     </Text>
-                    <Text className='text-slate-300 mt-[-5px]'>What do you want to learn today?</Text>
+
+                    <Text className='mt-[-5px]' style={{ color: "white", fontFamily: theme.fonts.Montserrat_500Medium.fontFamily }}>What do you want to learn today?</Text>
 
                 </View>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
@@ -61,7 +80,9 @@ const HomeScreen = ({ navigation }) => {
                         color="white"
                     />
                     <View>
-                        <RoundedImage source={require("../../../assets/studentAvatar.jpeg")} />
+                        <RoundedImage source={require("../../../assets/studentAvatar.jpeg")}
+                            width={30} height={30}
+                        />
                     </View>
                     <View>
 
@@ -81,13 +102,11 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             <View className='bg-white rounded-md'>
-
                 <View
                     style={{ width: 360, height: 200 }}
                     className=' bg-blue-300  my-4 mx-auto items-center rounded-lg'>
                     <View style={{ flexDirection: "row", gap: 10 }}
-                        className='flex-1 justify-center items-center m-0 '>
-
+                        className='flex-1 justify-center items-center m-0'>
                         <View style={{ flexDirection: "column" }}>
                             <Text className='w-40 font-semibold text-lg text-white'>
                                 Relearn, Unlearn and Relearn to see the hidden future
@@ -102,34 +121,50 @@ const HomeScreen = ({ navigation }) => {
                         </View>
                         <Image source={require("../../../assets/book.png")} style={{ width: 130, height: 130 }} />
                     </View>
-
-
                 </View>
+            </View>
 
-                <ScrollView
-                    contentContainerStyle={{ flexDirection: "column", flexGrow: 1, }}
-                >
+            <ScrollView
+                showsHorizontalScrollIndicator={false}
+            >
+                <View style={{ backgroundColor: "white" }}>
+                    <View style={{ flexDirection: "row" }} className="justify-between items-center m-0 px-3">
+                        <Text className='text-lg font-semibold my-2'>
+                            Categories</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate("Course")} className='bg-blue-200 rounded-lg py-1 px-2 ' style={{ flexDirection: "row" }}>
+                            <Text className='text-blue-600 text-md '>See all</Text>
+                            <View>
+                                <ApIcon type="MaterialIcons" name="chevron-right" size={20} color="#1E90FF" />
+                            </View>
+
+                        </TouchableOpacity>
+                    </View>
                     <ScrollView
                         contentContainerStyle={{ flexDirection: "row", flexGrow: 1 }}
                         horizontal
                         showsHorizontalScrollIndicator={false}
                     >
                         {buttons.map((b, index) => (
-                            <View style={{ width: 150, paddingHorizontal: 10 }} key={index}>
-                                <TouchableOpacity className=' rounded-lg  hover:bg-blue-300 hover:text-white justify-center items-center shadow-md shadow-slate-300 py-2  border-2 border-slate-200 ' style={{ flexDirection: "row" }}
+                            <View style={{ paddingHorizontal: 10 }} key={index}>
+                                <TouchableOpacity
+                                    style={{ flexDirection: "column" }}
                                 >
-                                    <Image
-                                        source={b.img} style={{ width: 20, height: 20 }} />
-                                    <Text className='p-2 text-center '>
+                                    <View className=" rounded-full hover:bg-blue-300 hover:text-white justify-center items-center shadow-md shadow-slate-300 bg-blue-300  w-20 h-20">
+                                        <ApIcon
+                                            type={b?.iconType as any}
+                                            name={b?.iconName} size={35} color="white" />
+                                    </View>
+
+                                    <Text className=' text-center  '>
                                         {b.name}
                                     </Text>
 
                                 </TouchableOpacity>
                             </View>))}
                     </ScrollView>
-                    <View style={{ paddingHorizontal: 10 }}>
+                    <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
                         <View style={{ flexDirection: "row" }} className="justify-between items-center m-0">
-                            <Text className='text-lg font-semibold my-2'>Courses</Text>
+                            <Text className='text-lg font-semibold my-2'>Popular Courses</Text>
                             <TouchableOpacity onPress={() => navigation.navigate("Course")} className='bg-blue-200 rounded-lg py-1 px-2 ' style={{ flexDirection: "row" }}>
                                 <Text className='text-blue-600 text-md '>See all</Text>
                                 <View>
@@ -155,10 +190,10 @@ const HomeScreen = ({ navigation }) => {
 
                     </View>
 
+                </View>
 
-                </ScrollView>
+            </ScrollView>
 
-            </View>
 
 
 
@@ -171,7 +206,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.buttonPrimaryColor
+        backgroundColor: theme.colors.primaryColor
     },
     courseContainer: {
         width: 260,

@@ -9,39 +9,32 @@ interface Props {
 export const HomeCourseItem = ({ course }: Props) => {
     return (
         <View style={styles.courseContainer} className='shadow-md shadow-slate-300'>
-            <View className='p-4 pt-4'>
+            <View className='pr-4 pl-4 pt-4 relative'>
                 <Image source={course?.image} style={{
-                    width: 230, height: 130, borderRadius: 30,
+                    width: 230, height: 130, borderRadius: 10,
                 }} />
+            </View>
+            <View style={{ flexDirection: "row", gap: 6 }} className='absolute  p-1 bg-white rounded-md top-6 left-6 '>
+                <ApIcon type="MaterialIcons" name="star" size={20} color="gold" />
+                <Text className='font-semibold'>4.6</Text>
             </View>
 
             <View>
 
                 <View className='px-5 pb-3'>
+                    <Text className='font-semibold text-lg'>
+                        {course?.title.slice(0, 25)}...
+                    </Text>
                     <View style={{ flexDirection: "row", gap: 6 }}>
-                        <View style={{ flexDirection: "row", gap: 8 }}>
-                            <View style={{ flexDirection: "row", gap: 8 }}>
-                                <ApIcon type="MaterialIcons" name="video-collection" size={20} color="#1E90FF" />
-                                <View>
-                                    <Text>{course?.lessons} Lessons</Text>
-                                </View>
-                            </View>
-                            <View style={{ flexDirection: "row", gap: 8 }}>
-                                <ApIcon type="MaterialIcons" name="timer" size={20} color="red" />
-                                <View>
-                                    <Text>{course?.time?.hour}hr {course?.time?.minute}min, {course?.time?.second}sec</Text>
-                                </View>
-                            </View>
-
-                        </View>
-
+                        <ApIcon type="MaterialIcons" name="person" size={20} />
+                        <Text className='font-semibold'>
+                            {course?.instructor}
+                        </Text>
                     </View>
-                    <Text className='font-semibold text-md'>
-                        {course?.title}
-                    </Text>
-                    <Text>
-                        <Text className='text-red-400'>Instructor:</Text> {course?.instructor}
-                    </Text>
+                    <View style={{ flexDirection: "row", gap: 4 }} className='py-1'>
+                        <Text className='bg-green-300 text-green-600 rounded-lg px-2'>Free</Text>
+                        <Text className='bg-yellow-300 text-yellow-600 rounded-lg px-2'>Best Selling</Text>
+                    </View>
                 </View>
 
             </View>

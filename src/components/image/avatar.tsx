@@ -3,13 +3,14 @@ import { View, Image, StyleSheet } from 'react-native';
 
 interface IProps {
     source: any,
-    className?: any
+    className?: any,
+    width?: number,
+    height?: number,
 }
 
-
-const RoundedImage = ({ source, className }: IProps) => {
+const RoundedImage = ({ source, className, width = 30, height = 30 }: IProps) => {
     return (
-        <View style={[styles.container, className]}>
+        <View style={[styles.container, { width, height }, className]}>
             <Image style={styles.image} source={source} />
         </View>
     );
@@ -17,9 +18,7 @@ const RoundedImage = ({ source, className }: IProps) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: 30, // Set your desired width
-        height: 30, // Set your desired height
-        borderRadius: 25, // Half of the width and height to make it circular
+        borderRadius: 50, // Half of the width and height to make it circular
         overflow: 'hidden', // Clip the content to the rounded shape
     },
     image: {

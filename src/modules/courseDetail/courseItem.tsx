@@ -11,12 +11,12 @@ export const CourseDetailComponent = ({ course }: IProps) => {
             <View className=''>
                 <Image source={course?.image} style={{
                     width: 400,
-                    height: 200,
-                    objectFit: "contain"
+                    height: 300,
+                    objectFit: "cover"
                 }} />
             </View>
 
-            <View>
+            {/* <View>
                 <View className='flex justify-center m-0 items-center my-4'>
                     <View style={{ flexDirection: "row", gap: 10 }}>
                         <View style={{ flexDirection: "row", gap: 10 }}>
@@ -46,7 +46,7 @@ export const CourseDetailComponent = ({ course }: IProps) => {
                     <Text className="px-4 text-center leading-4">{course?.description}</Text>
                 </View>
 
-            </View>
+            </View> */}
         </View>
     )
 };

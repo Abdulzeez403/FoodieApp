@@ -14,50 +14,75 @@ const BottomTabNavigator = () => {
         <Tab.Navigator>
 
             <Tab.Screen
+
                 options={{
-                    tabBarActiveTintColor: "red",
-                    headerShown: false,
-                    tabBarIcon: () => (
-                        <ApIcon type="AntDesign" name="appstore-o" size={24} />
+                    tabBarIcon: ({ focused }) => (
+                        <ApIcon
+                            type="AntDesign"
+                            name="appstore-o"
+                            size={24}
+                            color={focused ? '#1E90FF' : 'black'}
+                        />
                     ),
+                    headerShown: false
+
                 }}
+
                 name={theme.screens.HomeScreen}
                 component={screens.HomeScreen}
             />
             <Tab.Screen
-                options={{
-                    tabBarActiveTintColor: "red",
-                    headerShown: false,
 
-                    tabBarIcon: () => (
-                        <ApIcon type="MaterialIcons" name="library-books" size={24} />
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <ApIcon
+                            type="MaterialIcons"
+                            name="library-books"
+                            size={24}
+                            color={focused ? '#1E90FF' : 'black'}
+                        />
                     ),
+                    headerShown: false
+
                 }}
+
                 name={theme.screens.CourseScreen}
                 component={screens.CourseScreen}
             />
             <Tab.Screen
+                name={theme.screens.BookMarkScreen}
+                component={screens.BookMarkScreen}
                 options={{
-                    tabBarActiveTintColor: "red",
-                    headerShown: false,
-
-                    tabBarIcon: () => (
-                        <ApIcon type="Ionicons" name="person-circle-outline" size={24} />
+                    tabBarIcon: ({ focused }) => (
+                        <ApIcon
+                            type="Ionicons"
+                            name="bookmarks-outline"
+                            size={24}
+                            color={focused ? '#1E90FF' : 'black'}
+                        />
                     ),
+                    headerShown: false
+
                 }}
+            />
+            <Tab.Screen
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <ApIcon
+                            type="Ionicons"
+                            name="person-circle-outline"
+                            size={24}
+                            color={focused ? '#1E90FF' : 'black'}
+                        />
+                    ),
+                    headerShown: false
+
+                }}
+
                 name={theme.screens.ProfileScreen}
                 component={screens.ProfileScreen}
             />
-            {/* <Tab.Screen
-                options={{
-                    tabBarActiveTintColor: "red",
-                    tabBarIcon: () => (
-                        <ApIcon type="Ionicons" name="home-outline" size={24} />
-                    ),
-                }}
-                name={theme.screens.HomeScreen}
-                component={screens.HomeScreen}
-            /> */}
+
         </Tab.Navigator>
     );
 };

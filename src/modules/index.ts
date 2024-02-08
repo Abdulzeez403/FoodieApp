@@ -6,6 +6,7 @@ import CourseScreen from "./course/screen";
 import ProfileScreen from "./profile/screen";
 import TabNavigator from "../navigation/mainTab";
 import CourseDetailScreen from "./courseDetail/screen";
+import BookMarkScreen from "./bookmark/screen";
 
 const screens = {
   SigninScreen,
@@ -16,5 +17,6 @@ const screens = {
   ProfileScreen,
   TabNavigator,
   CourseDetailScreen,
+  BookMarkScreen,
 };
 export { screens };

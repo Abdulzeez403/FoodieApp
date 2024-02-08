@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { theme } from "../../constants/theme"
 
 interface IProps {
     label: string;
@@ -20,7 +21,7 @@ export const ApButton: React.FC<IProps> = ({
         <TouchableOpacity
             onPress={onPress}
             disabled={disabled}
-            style={[styles.button, styles[`round_${round}`], style[type].button]}
+            style={[styles.button, styles[`round_${round}`], style[type].button,]}
         >
             <Text style={{ ...style[type].text }}>{label}</Text>
         </TouchableOpacity>
@@ -30,12 +31,14 @@ export const ApButton: React.FC<IProps> = ({
 const style = {
     primary: StyleSheet.create({
         button: {
-            backgroundColor: "green",
-            width: 320,
+            backgroundColor: "#1E90FF",
+            borderRadius: 8,
+            // marginHorizontal: 20
 
         },
         text: {
             color: "white",
+            fontFamily: "Montserrat-Bold"
         },
     }),
     secondary: StyleSheet.create({

@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import React, { useEffect, useState } from "react"
 import { screens } from '../modules/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import QuizScreen from '../modules/quiz/screen';
+import ContentScreen from '../modules/lesson/screen';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -16,6 +18,8 @@ export type RootStackParamList = {
     AuthStack: undefined;
     MainStack: undefined;
     CourseStack: undefined;
+    ContentScreen: undefined;
+    QuizScreen: undefined;
 }
 
 // const Stack = createNativeStackNavigator(RootStackParamList)();
@@ -30,13 +34,12 @@ const AuthStack = () => (
         <Stack.Screen name="SignIn" component={screens.SigninScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
 );
-const CourseStack = () => (
-    <Stack.Navigator initialRouteName="Course">
-        <Stack.Screen name="Course" component={screens.CourseScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CourseDetail" component={screens.CourseDetailScreen} options={{ headerShown: false }} />
-        {/* Add more screens as needed */}
-    </Stack.Navigator>
-);
+// const CourseStack = () => (
+//     <Stack.Navigator initialRouteName="Course">
+//         <Stack.Screen name="Course" component={screens.CourseScreen} options={{ headerShown: false }} />
+//         <Stack.Screen name="CourseDetail" component={screens.CourseDetailScreen} options={{ headerShown: false }} />
+//     </Stack.Navigator>
+// );
 
 const MainStack = () => (
     <Stack.Navigator initialRouteName="TabNavigator">
@@ -46,7 +49,8 @@ const MainStack = () => (
         <Stack.Screen name="Profile" component={screens.ProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Course" component={screens.CourseScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CourseDetail" component={screens.CourseDetailScreen} options={{ headerShown: false }} />
-        {/* <Stack.Screen name="CourseStack" component={CourseStack} /> */}
+        <Stack.Screen name="QuizScreen" component={QuizScreen} />
+        <Stack.Screen name="ContentScreen" component={ContentScreen} />
     </Stack.Navigator>
 );
 

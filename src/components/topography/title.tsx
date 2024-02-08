@@ -1,13 +1,13 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native';
-// import { Text } from '@rneui/themed';
+import { theme } from "../../constants/theme"
 
 
 interface IProps {
-    children: string
+    children: string,
 }
 
-const ApTitle = ({ children }: IProps) => {
+export const ApText = ({ children }: IProps) => {
     return (
         <View >
             <Text style={styles.TextStyle}>{children}</Text>
@@ -15,13 +15,10 @@ const ApTitle = ({ children }: IProps) => {
     )
 }
 
-export default ApTitle
 
 const styles = StyleSheet.create({
     TextStyle: {
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 28
+        //    theme.fonts.H1,
 
     }
 })
