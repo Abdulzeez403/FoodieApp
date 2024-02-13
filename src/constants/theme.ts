@@ -64,7 +64,7 @@ const screens: any = {
 
   //Home
   HomeScreen: "Home",
-  CourseScreen: "Course",
+  CourseScreen: "My Course",
   ProfileScreen: "Profile",
   CourseDetailScreen: "CourseDetail",
   ContentScreen: "ContentScreen",

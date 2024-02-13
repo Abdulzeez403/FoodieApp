@@ -5,6 +5,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from './src/context.tsx';
 import React, { useCallback } from 'react';
 import { CourseProvider } from "./src/modules/course/context.tsx"
+import { ContentProvider } from "./src/modules/courseDetail/context.tsx"
+import { LessonProvider } from './src/modules/lesson/context.tsx';
+<ScreensStack />
+import { QuizProvider } from './src/modules/quiz/context.tsx';
 
 
 export default function App() {
@@ -27,7 +31,15 @@ export default function App() {
         <SafeAreaProvider >
             <AuthProvider>
                 <CourseProvider>
-                    <ScreensStack />
+                    <ContentProvider>
+                        <LessonProvider>
+                            <QuizProvider>
+                                <ScreensStack />
+                            </QuizProvider>
+                        </LessonProvider>
+
+                    </ContentProvider>
+
                 </CourseProvider>
             </AuthProvider>
         </SafeAreaProvider>

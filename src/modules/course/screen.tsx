@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TouchableOpacity, StyleSheet, Animated, SafeAreaView, PanResponder } from 'react-native';
-import { useCouresContext } from './context';
-import { CourseItem } from './components/courseItem';
+import { View, FlatList, TouchableOpacity, StyleSheet, Animated, SafeAreaView, PanResponder, useWindowDimensions } from 'react-native';
+import { useCourseContext } from './context';
+import { ApBackButton, ApHeader } from '../../components/header';
+import MyCourseNavigatorTab from './MyCourseNavigator';
+import { OngoingScreen } from './components/ongoing';
 
 const CourseScreen = ({ navigation }) => {
-    const { getCourses, courses } = useCouresContext();
+    const { getCourses, courses } = useCourseContext();
+    const { width } = useWindowDimensions()
 
     const [refreshing, setRefreshing] = useState(false);
     const [data, setData] = useState(courses);
@@ -29,38 +32,13 @@ const CourseScreen = ({ navigation }) => {
         fetchData();
     };
 
-    const panResponder = useRef(
-        PanResponder.create({
-            onMoveShouldSetPanResponder: (_event, gestureState) => {
-                // Allow pan responder if the user is scrolling down and not already refreshing
-                return gestureState.dy > 0 && !refreshing;
-            },
-            onPanResponderRelease: (_event, gestureState) => {
-                if (gestureState.dy > 50) { // Check if the user has dragged down enough
-                    onRefresh();
-                }
-            },
-        })
-    ).current;
+
 
     return (
         <SafeAreaView style={styles.container}>
+            <ApHeader title="My Course" left={<ApBackButton />} />
             <View style={styles.courseView}>
-                <FlatList
-                    data={courses}
-                    keyExtractor={course => course._id}
-                    horizontal={false}
-                    showsVerticalScrollIndicator={false}
-                    refreshControl={
-                        <Animated.View style={{ height: refreshing ? 50 : 0, backgroundColor: "red", }} />
-                    }
-                    renderItem={({ item: course }) => (
-                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course })}>
-                            <CourseItem course={course} />
-                        </TouchableOpacity>
-                    )}
-                    {...panResponder.panHandlers}
-                />
+                <MyCourseNavigatorTab courses={courses} onRefresh={onRefresh} refreshing={refreshing} />
             </View>
         </SafeAreaView>
     );
@@ -71,8 +49,12 @@ export default CourseScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // marginVertical: 20,
+        // backgroundColor: "white"
+
+
     },
     courseView: {
         flex: 1,

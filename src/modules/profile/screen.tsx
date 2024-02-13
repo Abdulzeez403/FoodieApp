@@ -41,13 +41,14 @@ const ProfileScreen = () => {
 
                 <View className='flex mt-5'>
                     <View style={{ flexDirection: "row", gap: 10 }}>
-                        <ProfileList icon={<ApIcon
-                            size={32}
-                            name="book"
-                            type="FontAwesome"
-                            color="white"
-                        // onPress={}
-                        />} title="Courses" />
+                        <ProfileList
+                            icon={<ApIcon
+                                size={32}
+                                name="book"
+                                type="FontAwesome"
+                                color="white"
+                            // onPress={}
+                            />} title="Courses" />
 
                         <ProfileList icon={<ApIcon
                             size={32}

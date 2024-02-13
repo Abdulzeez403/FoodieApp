@@ -7,36 +7,30 @@ import { useNavigation } from '@react-navigation/native';
 import { ApButton } from '../../components';
 
 import { theme } from "../../constants/theme"
+import { useQuizContext } from './context';
+import RenderItem from '../Onboard/components/RenderItem';
 
 
-interface IQuestion {
-    id: number,
-    question: string,
-    options: string[],
-    correctOption: number
+interface IProps {
+    course: {}
 }
 
-const QuizScreen = () => {
-    const questions: IQuestion[] = [
-        {
-            id: 1,
-            question: "What is Python",
-            options: ["Python", "JavaScript", "HTMl", "Laravel"],
-            correctOption: 0,
-        },
-        {
-            id: 2,
-            question: "How to invoke function in Javascript?",
-            options: ["(func)", "(fun())", "fun()", "()func"],
-            correctOption: 3,
-        },
-        {
-            id: 3,
-            question: "React js is a javascript framework as well as Python",
-            options: ["No", "Yes",],
-            correctOption: 0,
-        }
-    ]
+const QuizScreen = ({ route }) => {
+    const { getQuizs, quizs, questions, getQuestions } = useQuizContext()
+    const course = route.params.course;
+
+    useEffect(() => {
+        const FetchQuiz = async () => {
+            try {
+                await getQuizs(course?._id);
+                const singleQuiz = quizs?.[0];
+                await getQuestions(singleQuiz?._id);
+            } catch (error) {
+                console.error("Error fetching quiz or questions:", error);
+            }
+        };
+        FetchQuiz();
+    }, [questions, quizs, course?._id]);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const { width, height } = Dimensions.get('window');
@@ -49,6 +43,8 @@ const QuizScreen = () => {
 
     const flatListRef = useRef(null);
     const navigation = useNavigation();
+
+
 
     // useEffect(() => {
     //     if (countdown > 0) {
@@ -104,7 +100,7 @@ const QuizScreen = () => {
         clearInterval(countdownInterval);
         const newScore = questions.reduce((acc, question, index) => {
             const selectedOption = selectedOptions[index];
-            const correctOption = question.correctOption;
+            const correctOption = question?.answer;
 
             if (selectedOption === correctOption) {
                 return acc + 1;
@@ -115,10 +111,7 @@ const QuizScreen = () => {
 
         setScore(newScore);
     };
-
-    // const optionLetter = ["A", "B", "C", "D", "E"]
-
-    const renderItem = ({ item, index }) => (
+    const RenderItem = ({ item, index }) => (
         <View style={[styles.flashcard, { width: width }]}>
             <View style={{ flexDirection: "row", gap: 15, alignItems: "center", marginBottom: 24, justifyContent: "center" }}>
                 <ApIcon
@@ -150,7 +143,10 @@ const QuizScreen = () => {
                     key={optionIndex}
                     style={[styles.option, { borderColor: selectedOptions[index] === optionIndex ? '#1E90FF' : 'grey', alignItems: "center" }]}
                     className='border-2 py-3 my-2 rounded-lg px-3'
-                    onPress={() => handleOptionPress(index, optionIndex)}
+                    onPress={() => {
+                        handleOptionPress(index, optionIndex);
+                        console.log(selectedOptions)
+                    }}
                 >
                     {selectedOptions[index] === optionIndex ? (
                         <ApIcon type="AntDesign" name="checkcircle" size={22} color={"#1E90FF"} />
@@ -191,8 +187,8 @@ const QuizScreen = () => {
                 data={questions}
                 horizontal
                 pagingEnabled
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={renderItem}
+                keyExtractor={(item) => item?._id}
+                renderItem={RenderItem}
                 showsHorizontalScrollIndicator={false}
                 initialScrollIndex={0}
                 getItemLayout={(data, index) => ({
@@ -200,41 +196,31 @@ const QuizScreen = () => {
                     offset: 460 * index,
                     index,
                 })}
-
             />
+
+            {/* {questions?.map((item, index) => (
+                <View>
+                    <RenderItem item={item} index={index} />
+                </View>
+            ))} */}
+
+
             {currentIndex === questions.length - 1 ? (
                 <View style={{ paddingHorizontal: 13 }}>
-
                     <ApButton label="Submit"
-                        onPress={async () => {
-                            await calculateScore();
+                        onPress={() => {
+                            calculateScore();
                             showModal();
+
                         }} />
 
-                    {/* <TouchableOpacity
-                        style={{
-                            backgroundColor: '#1E90FF',
-                            padding: 12,
-                            borderRadius: 5,
-                            margin: 10,
-                            alignSelf: 'center',
-                            width: width / 2
-                        }}
-                        onPress={() => {
-                            resetQuestions()
-                        }}
-                    >
-                        <Text style={{ color: 'white', textAlign: 'center', fontSize: 17 }}>reset</Text>
-                    </TouchableOpacity> */}
                 </View>
-
-
             ) : (
-
-
                 <View style={{ paddingHorizontal: 13 }}>
                     <ApButton label="Next"
-                        onPress={handleNext}
+                        onPress={() => {
+                            handleNext();
+                        }}
                         disabled={currentIndex === questions.length - 1}
                     />
                 </View>

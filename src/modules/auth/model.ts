@@ -1,1 +1,3 @@
-export interface IAuthModel {}
+export interface IAuthModel {
+  _id: string;
+}

@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { createContext, useContext, useState } from 'react'
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { ICurrentUser } from './modal';
 interface IProp {
     loading: boolean;
-    user: {},
+    user: ICurrentUser,
     signIn: (payload: any) => Promise<any>;
     signUp: (values: any) => void;
+    currentUser: (userId: any) => void;
 }
 const AuthContext = createContext<IProp>({
     loading: false,
@@ -13,7 +15,8 @@ const AuthContext = createContext<IProp>({
     signIn: (payload) => {
         return null
     },
-    signUp: (values) => { }
+    signUp: (values) => { },
+    currentUser: (userId) => { }
 });
 
 export const useAuthContext = () => {
@@ -33,7 +36,9 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
     const [user, setUser] = useState<{}>({} as any);
 
 
-    const port = "192.168.43.233:8081/api"
+    const port = "https://lightboardserver.onrender.com/api"
+
+    // const port = 'http://localhost:8000/api'
 
     const signIn = async (payload: any) => {
         setLoading(true)
@@ -54,7 +59,7 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
 
     const signUp = async (userData: any) => {
         try {
-            const response = await axios.post(`${port}/api/students`, userData);
+            const response = await axios.post(`${port}/students`, userData);
             await AsyncStorage.setItem('user', JSON.stringify(response.data));
         } catch (error) {
             console.error('Error signing up:', error);
@@ -62,9 +67,35 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
         }
     };
 
+    const currentUser = async (userId: any) => {
+        try {
+            const response = await axios.get(`${port}/student/${userId}`);
+            setUser(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            throw error;
+        }
+    };
+
+
+    const signOut = async () => {
+        setLoading(true);
+        try {
+            await AsyncStorage.removeItem('user');
+            setUser(null);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            console.error('Error signing out:', error);
+            throw error;
+        }
+    };
+
+
     return (
         <AuthContext.Provider
-            value={{ loading, user, signIn, signUp }}>
+            value={{ loading, user, signIn, signUp, currentUser, }}>
             {children}
 
         </AuthContext.Provider>

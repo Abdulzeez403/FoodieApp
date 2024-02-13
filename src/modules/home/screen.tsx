@@ -1,12 +1,17 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Button } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Button, ActivityIndicator } from 'react-native'
+import React, { useEffect } from 'react'
 import { theme } from "../../constants/theme"
 import { ApSearchInput } from '../../components/input/searchInput';
 import { ApIcon } from '../../components/icon';
-import { courses } from "../../data"
+// import { courses } from "../../data"
 import { HomeCourseItem } from './components/courseItem';
 import RoundedImage from '../../components/image/avatar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCourseContext } from '../course/context';
+import { useAuthContext } from '../../context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ApLoader } from '../../components/loader';
+
 
 interface IButtonCategory {
     name: string,
@@ -42,17 +47,48 @@ const HomeScreen = ({ navigation }) => {
             iconType: "Ionicons"
 
 
+        },
+
+        {
+            name: "Notifications",
+            iconName: "notifications-outline",
+            iconType: "Ionicons"
+
+
+        },
+        {
+            name: "Notifications",
+            iconName: "notifications-outline",
+            iconType: "Ionicons"
+
+
         }
 
 
 
     ];
+    const { getCourses, courses, } = useCourseContext();
+    const { currentUser, user } = useAuthContext();
 
 
+    useEffect(() => {
+        const fetchCoursesAndCurrentUser = async () => {
+            try {
+                await getCourses();
+                const userData = await AsyncStorage.getItem('user') as any;
+                const parsedUserData = JSON.parse(userData);
+                if (parsedUserData?._id) {
+                    await currentUser(parsedUserData._id);
+                }
+            } catch (error) {
+                console.error('Error fetching courses or current user:', error);
+            }
+        };
+
+        fetchCoursesAndCurrentUser();
 
 
-
-
+    }, [])
 
 
 
@@ -61,15 +97,11 @@ const HomeScreen = ({ navigation }) => {
             <View style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10, paddingHorizontal: 10 }} >
 
                 <View>
-
-                    {/* <Text style={{ fontSize: 32, color: "white", fontFamily:theme.fonts.Montserrat_500Medium }}>
-                        Welcome, Sodiq
-                    </Text> */}
                     <Text style={theme.fonts.H1}>
-                        Welcome, Sodiq
+                        Welcome, {user?.firstName}
                     </Text>
 
-                    <Text className='mt-[-5px]' style={{ color: "white", fontFamily: theme.fonts.Montserrat_500Medium.fontFamily }}>What do you want to learn today?</Text>
+                    <Text className='mt-[-5px]' style={{ color: "white", fontFamily: theme.fonts.Montserrat_500Medium.fontFamily, fontSize: 12 }}>What do you want to learn today?</Text>
 
                 </View>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
@@ -144,23 +176,23 @@ const HomeScreen = ({ navigation }) => {
                         horizontal
                         showsHorizontalScrollIndicator={false}
                     >
-                        {buttons.map((b, index) => (
-                            <View style={{ paddingHorizontal: 10 }} key={index}>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "column" }}
-                                >
-                                    <View className=" rounded-full hover:bg-blue-300 hover:text-white justify-center items-center shadow-md shadow-slate-300 bg-blue-300  w-20 h-20">
-                                        <ApIcon
-                                            type={b?.iconType as any}
-                                            name={b?.iconName} size={35} color="white" />
-                                    </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            {buttons.map((b, index) => (
+                                <View style={{ paddingHorizontal: 10 }} key={index}>
+                                    <TouchableOpacity
+                                        style={{ flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}
+                                    >
+                                        <View className="rounded-full justify-center items-center hover:bg-blue-300 hover:text-white shadow-md shadow-slate-300 bg-blue-300" style={{ height: 60, width: 60, justifyContent: 'center' }}>
+                                            <View>
+                                                <ApIcon type={b?.iconType as any} name={b?.iconName} size={30} color="white" />
+                                            </View>
+                                        </View>
+                                        <Text className='text-center text-sm'>{b.name}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </View>
 
-                                    <Text className=' text-center  '>
-                                        {b.name}
-                                    </Text>
-
-                                </TouchableOpacity>
-                            </View>))}
                     </ScrollView>
                     <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
                         <View style={{ flexDirection: "row" }} className="justify-between items-center m-0">
@@ -173,20 +205,25 @@ const HomeScreen = ({ navigation }) => {
 
                             </TouchableOpacity>
                         </View>
+                        {courses.length === 0 ? (<View style={{ height: 270 }}>
+                            <ApLoader />
+                        </View>) : (
 
-                        <View style={{ height: 270 }}>
-                            <FlatList
-                                data={courses}
-                                keyExtractor={(course) => course.id}
-                                horizontal={true}
-                                showsVerticalScrollIndicator={false}
-                                renderItem={({ item: course }) => (
-                                    <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course })}>
-                                        <HomeCourseItem course={course} />
-                                    </TouchableOpacity>
-                                )}
-                            />
-                        </View>
+                            <View style={{ height: 270 }}>
+                                <FlatList
+                                    nestedScrollEnabled={true}
+                                    scrollEnabled={false}
+                                    data={courses}
+                                    keyExtractor={(item) => item._id}
+                                    horizontal={true}
+                                    showsVerticalScrollIndicator={false}
+                                    renderItem={({ item: course }) => (
+                                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course })}>
+                                            <HomeCourseItem course={course} />
+                                        </TouchableOpacity>
+                                    )}
+                                />
+                            </View>)}
 
                     </View>
 

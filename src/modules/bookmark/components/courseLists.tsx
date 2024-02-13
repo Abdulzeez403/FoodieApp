@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import { ApIcon } from '../../../components/icon'
-import * as Progress from 'react-native-progress';
 
 
 interface Props {
@@ -42,9 +41,7 @@ export const CourseItem = ({ course }: Props) => {
                 <Text>
                     <Text className='text-red-400'>Instructor:</Text> {course?.instructor}
                 </Text>
-                <View className='my-2'>
-                    <Progress.Bar progress={0.8} width={180} />
-                </View>
+
             </View>
         </View>
     )

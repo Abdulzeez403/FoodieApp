@@ -7,10 +7,11 @@ interface Props {
 }
 
 export const HomeCourseItem = ({ course }: Props) => {
+
     return (
         <View style={styles.courseContainer} className='shadow-md shadow-slate-300'>
             <View className='pr-4 pl-4 pt-4 relative'>
-                <Image source={course?.image} style={{
+                <Image source={{ uri: course?.images?.[0]?.uri }} style={{
                     width: 230, height: 130, borderRadius: 10,
                 }} />
             </View>

@@ -1,15 +1,15 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
-import { ApIcon } from "../../components/icon";
 interface IProps {
     course: any
 }
 
 export const CourseDetailComponent = ({ course }: IProps) => {
+
     return (
         <View style={styles.courseContainer}>
             <View className=''>
-                <Image source={course?.image} style={{
+                <Image source={{ uri: course?.images?.[0]?.uri }} style={{
                     width: 400,
                     height: 300,
                     objectFit: "cover"

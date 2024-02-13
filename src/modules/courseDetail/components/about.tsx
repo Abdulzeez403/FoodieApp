@@ -3,14 +3,17 @@ import React from "react"
 import { ScrollView, Text, View } from "react-native"
 import RoundedImage from "../../../components/image/avatar";
 import { ApIcon } from "../../../components/icon";
-export const AboutScreen = () => {
+
+
+export const AboutScreen = ({ route }) => {
+    const { course } = route.params;
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
             className="bg-white ">
             <View className="bg-white">
                 <Text className="font-bold" style={{ fontSize: 20 }}>About Course</Text>
-                <Text className="" style={{ fontSize: 18 }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe illum beatae in rem voluptatem ea corporis labore quidem cumque doloribus?</Text>
+                <Text className="" style={{ fontSize: 18 }}>{course?.description}</Text>
 
             </View>
             <View>
@@ -22,8 +25,9 @@ export const AboutScreen = () => {
                             width={50} height={50}
                         />
                         <View>
-                            <Text className="font-bold text-lg">Abdulazeez Sodiq</Text>
-                            <Text>Abdulazeez Sodiq</Text>
+                            <Text className="font-bold text-lg">
+                                {course?.instructor}</Text>
+                            <Text>Teacher</Text>
                         </View>
                     </View>
 
