@@ -1,13 +1,11 @@
-import { StyleSheet, Text, View, Image, Touchable, TouchableOpacity, SafeAreaView, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ToastAndroid } from 'react-native'
 import React, { useEffect } from 'react'
 import { CourseDetailComponent } from './courseItem';
 import { ApIcon } from '../../components/icon';
 import CourseNavigatorTab from './courseNavigator';
 import { CourseHeader } from './components/header';
 import { ApButton } from '../../components';
-import { theme } from "../../constants/theme"
 import { useCourseContext } from '../course/context';
-import { useContentContext } from '../courseDetail/context'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -24,29 +22,36 @@ const CourseDetailScreen = ({ route }) => {
             <Text style={{ fontSize: 15, }}>{title}</Text>
         </View>
     )
-
     const { course } = route.params;
-    const { createEnrolledStudent, enrollStudent } = useCourseContext();
-    const { getContents, contents } = useContentContext();
-
-    useEffect(() => {
-        getContents(course?._id)
-    }, [course, contents]);
-
+    const { createEnrolledStudent, enrollStudent, getEnrolledStudent } = useCourseContext();
     const handleEnrollment = async () => {
         try {
-            const userData = await AsyncStorage.getItem('user'); // Fetch user data from AsyncStorage
+            const userData = await AsyncStorage.getItem('user');
             if (!userData) {
-                throw new Error('User data not found'); // Handle missing user data
+                throw new Error('User data not found');
             }
             const parsedUserData = JSON.parse(userData);
             await createEnrolledStudent({ courseId: course?._id, studentId: parsedUserData?._id });
             ToastAndroid.show('Enrolled Successfully!', ToastAndroid.SHORT);
         } catch (error) {
             console.error('Error enrolling student:', error);
-            ToastAndroid.show('Failed to enroll student', ToastAndroid.SHORT);
+            ToastAndroid.show('You have already enrolled!', ToastAndroid.SHORT);
         }
     };
+
+    useEffect(() => {
+        const GetEnrolled = async () => {
+            const userData = await AsyncStorage.getItem('user');
+            if (!userData) {
+                throw new Error('User data not found'); // Handle missing user data
+            }
+            const parsedUserData = JSON.parse(userData);
+
+            getEnrolledStudent(parsedUserData?._id, course?._id)
+        }
+        GetEnrolled()
+
+    }, [])
 
 
     return (
@@ -94,16 +99,16 @@ const CourseDetailScreen = ({ route }) => {
                             title="Certification"
                         />
                     </View>
-                    <CourseNavigatorTab course={course} contents={contents} />
+                    <CourseNavigatorTab course={course} />
 
                 </View>
 
             </View>
-            {enrollStudent ? (<View style={styles.stickyButtonContainer} className='z-10'>
+            {enrollStudent ? null : (<View style={styles.stickyButtonContainer} className='z-10'>
                 <ApButton label='Enroll Now'
                     onPress={() => handleEnrollment()}
                 />
-            </View>) : null}
+            </View>)}
         </SafeAreaView>
 
     )

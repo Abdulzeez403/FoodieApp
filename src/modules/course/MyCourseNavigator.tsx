@@ -3,24 +3,28 @@ import { OngoingScreen } from "./components/ongoing";
 import { CompletedScreen } from "./components/completed";
 import React from "react";
 
+interface IProps {
+    // courses: any,
+    // // onRefresh: () => void;
+    // refreshing: any
+}
+
 
 
 const Tab = createMaterialTopTabNavigator();
-
-interface IProps {
-    courses: any,
-    onRefresh: () => void;
-    refreshing: any
-}
-
-const MyCourseNavigatorTab = ({ courses, refreshing, onRefresh }: IProps) => {
+const MyCourseNavigatorTab = ({ }: IProps) => {
     return (
         <Tab.Navigator >
             <Tab.Screen name="Ongoing" component={OngoingScreen}
-                initialParams={{ courses: courses, onRefresh: onRefresh, refreshing: refreshing }} />
-            <Tab.Screen name="Completed" component={CompletedScreen} initialParams={{ courses: courses, onRefresh: onRefresh, refreshing: refreshing }} />
+            // initialParams={{ courses: courses, refreshing: refreshing }}
+            />
+
+            <Tab.Screen name="Completed" component={CompletedScreen}
+
+            // initialParams={{ courses: courses, refreshing: refreshing }} 
+            />
         </Tab.Navigator>
     );
 }
 
-export default MyCourseNavigatorTab
+export default MyCourseNavigatorTab;

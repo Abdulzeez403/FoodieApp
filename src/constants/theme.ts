@@ -63,10 +63,11 @@ const screens: any = {
   OnBoardingScreen: "OnBoarding",
 
   //Home
-  HomeScreen: "Home",
+  HomeScreen: "home",
   CourseScreen: "My Course",
   ProfileScreen: "Profile",
   CourseDetailScreen: "CourseDetail",
+  ContentListsScreen: "ContentLists",
   ContentScreen: "ContentScreen",
   BookMarkScreen: "BookMark",
 

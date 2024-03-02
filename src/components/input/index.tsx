@@ -17,39 +17,39 @@ interface IProps extends TextInputProps {
 
 const ApTextInput = (props: IProps) => {
 
+    const { width } = useWindowDimensions()
+
 
     const { className, label, name, placeholder, value, formikProps, style, inputStyle, type } = props
 
     return (
-        <View>
-            <View>
-                <Text>{label}</Text>
-                <TextInput
-                    className={className ? className : "rounded-lg  shadow-lg shadow-black  bg-slate-200 "}
-                    {...props}
-                    style={[styles.input, inputStyle, {}]}
-                    placeholder={placeholder}
-                    onChangeText={formikProps?.handleChange(name)}
-                    onBlur={() => formikProps?.setFieldTouched(name)}
-                    value={formikProps?.values[name]} />
+        <View style={{ width: width, paddingHorizontal: 20 }}>
+            <Text>{label}</Text>
+            <TextInput
+                className={className ? className : "rounded-lg  shadow-lg shadow-black  bg-slate-200  "}
+                {...props}
+                style={[styles.input, inputStyle,]}
+                placeholder={placeholder}
+                onChangeText={formikProps?.handleChange(name)}
+                onBlur={() => formikProps?.setFieldTouched(name)}
+                value={formikProps?.values[name]} />
 
-                <>
-                    {formikProps?.touched[name] && formikProps?.errors[name] && (
-                        <Text
-                            style={{
-                                fontSize: 14,
-                                color: "red",
-                                marginBottom: 10,
-                                marginTop: 5,
-                            }}
-                        >
-                            {(formikProps?.errors as any)[name]}
-                        </Text>
-                    )}
-                </>
-            </View>
-
+            <>
+                {formikProps?.touched[name] && formikProps?.errors[name] && (
+                    <Text
+                        style={{
+                            fontSize: 14,
+                            color: "red",
+                            marginBottom: 10,
+                            marginTop: 5,
+                        }}
+                    >
+                        {(formikProps?.errors as any)[name]}
+                    </Text>
+                )}
+            </>
         </View>
+
     )
 
 }
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: "white",
         height: 50,
-        width: 320,
         shadowRadius: 20,
         marginVertical: 10,
         paddingHorizontal: 8

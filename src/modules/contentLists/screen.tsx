@@ -1,28 +1,26 @@
-
-import React, { useEffect } from "react"
-import { ActivityIndicator, FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native"
-import { ApIcon } from "../../../components/icon";
-import { useNavigation } from "@react-navigation/native";
-import { ApButton } from "../../../components";
-import { ApLoader } from "../../../components/loader";
-import { useCourseContext } from "../../course/context";
-import { useQuizContext } from "../../quiz/context";
-import { useContentContext } from "../context";
-
-export const LessonsScreen = ({ route }) => {
-    const course = route.params.course;
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { useContentContext } from '../courseDetail/context'
+import { useNavigation } from '@react-navigation/native'
+import { ApIcon } from '../../components/icon'
+import { ApButton } from '../../components'
+import { useQuizContext } from '../quiz/context'
+import { ApLoader } from '../../components/loader'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
+const ContentListScreen = ({ route }) => {
 
-    const navigation = useNavigation();
+    const { item } = route.params;
 
-    const { enrollStudent } = useCourseContext()
-    const { contents, getContents, loading } = useContentContext()
+    const navigation = useNavigation()
 
-    const { getQuizs, quizs, getQuestions } = useQuizContext()
+    const { getContents, contents, } = useContentContext();
+
+    const { getQuizs, getQuestions, quizs } = useQuizContext()
 
     const FetchQuiz = async () => {
-        await getQuizs(course?._id);
+        await getQuizs(item);
         const singleQuiz = quizs?.[0];
         if (singleQuiz) {
             const quizId = singleQuiz._id;
@@ -33,9 +31,9 @@ export const LessonsScreen = ({ route }) => {
     };
 
     useEffect(() => {
-        FetchQuiz();
-        getContents(course?._id)
-    }, []);
+        getContents(item);
+        FetchQuiz()
+    }, [])
 
     const ContentItem = ({ item, index }) => {
 
@@ -44,7 +42,6 @@ export const LessonsScreen = ({ route }) => {
             <TouchableOpacity
                 style={{ flexDirection: "column", gap: 10, marginVertical: 4 }}
                 onPress={() => navigation.navigate("ContentScreen", { item: item })}
-                disabled={enrollStudent ? false : true}
             >
                 <View style={{ flexDirection: "row", justifyContent: "space-between", borderRadius: 30, paddingVertical: 5, backgroundColor: "white", borderWidth: 1, borderColor: "grey" }} className="shadow-lg shadow-white px-2">
                     <View style={{ flexDirection: "row", gap: 10, alignItems: "center", backgroundColor: "white" }}  >
@@ -54,10 +51,10 @@ export const LessonsScreen = ({ route }) => {
                         <Text className="font-bold" style={{ fontSize: 18 }}>{item?.title}</Text>
                     </View>
                     <View className=" rounded-full hover:bg-blue-300 hover:text-white justify-center items-center  w-10 h-10 bg-white">
-                        {enrollStudent ? (<ApIcon type="AntDesign" name="play" size={32} color="blue" />) : (
-                            <ApIcon type="MaterialIcons" name="lock-outline" size={32} />
-                        )
-                        }
+                        <ApIcon type="AntDesign" name="play" size={32} color="blue" />
+
+
+
                     </View>
                 </View>
             </TouchableOpacity>
@@ -65,17 +62,10 @@ export const LessonsScreen = ({ route }) => {
     };
 
     return (
-        <View
-            className="py-3 bg-white ">
-            <View >
-                <Text className="text-lg font-bold pb-2">Lessions ({contents?.length})</Text>
-            </View>
 
-            {loading ?
-                (<View>
-                    <ApLoader />
-                </View>) :
-                (
+        <SafeAreaView>
+            <View className='px-3 py-2'>
+                {contents.length === 0 ? (<ApLoader />) : (
                     <ScrollView>
                         <FlatList
                             nestedScrollEnabled={true}
@@ -86,24 +76,28 @@ export const LessonsScreen = ({ route }) => {
                             renderItem={({ item, index }) => <ContentItem item={item} index={index} />}
                             ListFooterComponent={
                                 <View>
-                                    {enrollStudent && (
-                                        <ApButton
-                                            label='Take Quiz'
-                                            onPress={() => {
-                                                FetchQuiz();
-                                                navigation.navigate("QuizScreen", { course: course })
-                                            }
-                                            }
-                                        />
-                                    )}
+                                    <ApButton
+                                        label='Take Quiz'
+                                        onPress={() => {
+                                            FetchQuiz();
+                                            navigation.navigate("QuizScreen", { course: item })
+                                        }
+                                        }
+                                    />
                                 </View>
+
                             }
                         />
-                    </ScrollView>)}
+                    </ScrollView>
+                )}
 
 
-        </View>
+            </View>
+        </SafeAreaView>
 
     )
-};
+}
 
+export default ContentListScreen
+
+const styles = StyleSheet.create({})

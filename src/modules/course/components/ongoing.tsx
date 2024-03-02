@@ -4,16 +4,16 @@ import { CourseItem } from './courseItem';
 import { useNavigation } from '@react-navigation/native';
 
 interface IProps {
-    courses: any,
-    onRefresh: () => void;
     refreshing: any,
     route: any
 
 }
 
-export const OngoingScreen = ({ route, refreshing, onRefresh, }: IProps) => {
+export const OngoingScreen = ({ route, refreshing, }: IProps) => {
     const navigation = useNavigation();
-    const { courses } = route.params;
+    // const courses = route.params.courses;
+    // console.log(courses, "...courses...")
+
 
     const panResponder = useRef(
         PanResponder.create({
@@ -23,33 +23,41 @@ export const OngoingScreen = ({ route, refreshing, onRefresh, }: IProps) => {
             },
             onPanResponderRelease: (_event, gestureState) => {
                 if (gestureState.dy > 50) { // Check if the user has dragged down enough
-                    onRefresh();
+                    // onRefresh();
                 }
             },
         })
     ).current;
 
     return (
-        <ScrollView className='bg-white w-96'>
+        <View className='bg-white w-96'>
 
-            <FlatList
+            {/* <FlatList
                 nestedScrollEnabled={true}
                 scrollEnabled={false}
                 data={courses}
                 keyExtractor={(item) => item?.id}
                 horizontal={false}
                 showsVerticalScrollIndicator={false}
-                refreshControl={
-                    <Animated.View style={{ height: refreshing ? 50 : 0, backgroundColor: "red", }} />
-                }
+                // refreshControl={
+                //     <Animated.View style={{ height: refreshing ? 50 : 0, backgroundColor: "red", }} />
+                // }
                 renderItem={({ item: course, index }) => (
                     <TouchableOpacity key={index} onPress={() => navigation.navigate("CourseDetail", { course })}>
                         <CourseItem course={course} />
                     </TouchableOpacity>
                 )}
                 {...panResponder.panHandlers}
-            />
-        </ScrollView>
+            /> */}
+            {/* {courses?.map((course, index) => (
+                <View key={index}>
+                    <Text>{course?.title}</Text>
+                    <Text>{course?.instructor}</Text>
+                </View>
+            ))} */}
+
+            <Text>hhhh</Text>
+        </View>
 
     )
 };

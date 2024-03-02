@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, View, Text, useWindowDimensions } from "react-native";
+import { StyleSheet, Modal, View, Text, useWindowDimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ApIcon } from "../icon";
 
@@ -8,10 +8,12 @@ interface IModal {
     modalVisible: boolean,
     hideModal: () => void;
     children: React.ReactNode;
+    className?: any,
+    present?: any
 
 }
 
-export const ModalComponent = ({ modalVisible, hideModal, children }: IModal) => {
+export const ModalComponent = ({ modalVisible, hideModal, children, className, present }: IModal) => {
 
     const { height } = useWindowDimensions()
 
@@ -25,10 +27,11 @@ export const ModalComponent = ({ modalVisible, hideModal, children }: IModal) =>
             statusBarTranslucent={true}
             visible={modalVisible}
             onRequestClose={hideModal}
+            presentationStyle={present}
 
         >
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} className="relative">
-                <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: 350, height: height, }} className="shadow-md shadow-slate-300">
+                <View style={[styles.container, className]} className="shadow-md shadow-slate-300">
                     <View className="absolute right-2 pt-4">
                         {/* <ApIcon
                             type="AntDesign"
@@ -45,3 +48,13 @@ export const ModalComponent = ({ modalVisible, hideModal, children }: IModal) =>
         </Modal>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        width: 350,
+        height: 300
+    }
+})

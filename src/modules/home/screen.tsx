@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import { theme } from "../../constants/theme"
 import { ApSearchInput } from '../../components/input/searchInput';
 import { ApIcon } from '../../components/icon';
-// import { courses } from "../../data"
 import { HomeCourseItem } from './components/courseItem';
 import RoundedImage from '../../components/image/avatar';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +10,7 @@ import { useCourseContext } from '../course/context';
 import { useAuthContext } from '../../context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ApLoader } from '../../components/loader';
+
 
 
 interface IButtonCategory {
@@ -69,26 +69,37 @@ const HomeScreen = ({ navigation }) => {
     ];
     const { getCourses, courses, } = useCourseContext();
     const { currentUser, user } = useAuthContext();
+    const { enrollStudent, getEnrolledStudent } = useCourseContext();
 
 
     useEffect(() => {
-        const fetchCoursesAndCurrentUser = async () => {
-            try {
-                await getCourses();
-                const userData = await AsyncStorage.getItem('user') as any;
-                const parsedUserData = JSON.parse(userData);
-                if (parsedUserData?._id) {
-                    await currentUser(parsedUserData._id);
-                }
-            } catch (error) {
-                console.error('Error fetching courses or current user:', error);
-            }
-        };
-
         fetchCoursesAndCurrentUser();
-
-
     }, [])
+
+    const fetchCoursesAndCurrentUser = async () => {
+        try {
+            await getCourses();
+            const userData = await AsyncStorage.getItem('user') as any;
+            const parsedUserData = JSON.parse(userData);
+            if (parsedUserData?._id) {
+                await currentUser(parsedUserData._id);
+            }
+        } catch (error) {
+            console.error('Error fetching courses or current user:', error);
+        }
+    };
+
+    const fetchEnrolledStudent = async (courseId: any) => {
+        const userData = await AsyncStorage.getItem('user');
+        if (!userData) {
+            throw new Error('User data not found');
+        }
+        const parsedUserData = JSON.parse(userData);
+        getEnrolledStudent(courseId, parsedUserData?._id);
+        console.log(enrollStudent, "....data")
+
+    }
+
 
 
 
@@ -163,7 +174,8 @@ const HomeScreen = ({ navigation }) => {
                     <View style={{ flexDirection: "row" }} className="justify-between items-center m-0 px-3">
                         <Text className='text-lg font-semibold my-2'>
                             Categories</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate("Course")} className='bg-blue-200 rounded-lg py-1 px-2 ' style={{ flexDirection: "row" }}>
+                        <TouchableOpacity
+                            className='bg-blue-200 rounded-lg py-1 px-2 ' style={{ flexDirection: "row" }}>
                             <Text className='text-blue-600 text-md '>See all</Text>
                             <View>
                                 <ApIcon type="MaterialIcons" name="chevron-right" size={20} color="#1E90FF" />
@@ -181,6 +193,7 @@ const HomeScreen = ({ navigation }) => {
                                 <View style={{ paddingHorizontal: 10 }} key={index}>
                                     <TouchableOpacity
                                         style={{ flexDirection: 'column', justifyContent: 'center', alignItems: "center" }}
+                                        onPress={() => { navigation.navigate(theme.screens.BookMarkScreen) }}
                                     >
                                         <View className="rounded-full justify-center items-center hover:bg-blue-300 hover:text-white shadow-md shadow-slate-300 bg-blue-300" style={{ height: 60, width: 60, justifyContent: 'center' }}>
                                             <View>
@@ -197,7 +210,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
                         <View style={{ flexDirection: "row" }} className="justify-between items-center m-0">
                             <Text className='text-lg font-semibold my-2'>Popular Courses</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate("Course")} className='bg-blue-200 rounded-lg py-1 px-2 ' style={{ flexDirection: "row" }}>
+                            <TouchableOpacity className='bg-blue-200 rounded-lg py-1 px-2 ' style={{ flexDirection: "row" }}>
                                 <Text className='text-blue-600 text-md '>See all</Text>
                                 <View>
                                     <ApIcon type="MaterialIcons" name="chevron-right" size={20} color="#1E90FF" />
@@ -211,14 +224,20 @@ const HomeScreen = ({ navigation }) => {
 
                             <View style={{ height: 270 }}>
                                 <FlatList
-                                    nestedScrollEnabled={true}
-                                    scrollEnabled={false}
+                                    // nestedScrollEnabled={true}
+                                    // scrollEnabled={false}
                                     data={courses}
                                     keyExtractor={(item) => item._id}
                                     horizontal={true}
                                     showsVerticalScrollIndicator={false}
                                     renderItem={({ item: course }) => (
-                                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course })}>
+                                        <TouchableOpacity onPress={() => {
+                                            fetchEnrolledStudent(course?._id)
+                                            navigation.navigate("CourseDetail", { course })
+
+                                        }
+
+                                        }>
                                             <HomeCourseItem course={course} />
                                         </TouchableOpacity>
                                     )}

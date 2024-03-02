@@ -2,11 +2,13 @@
 import axios from 'axios';
 import React, { createContext, useContext, useState } from 'react'
 import { IContent } from './model'
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
 interface IProp {
     loading: boolean;
     contents: IContent[],
     content: any,
-    getContents: (courseId: any) => void;
+    getContents: (courseId: any) => Promise<IContent[]>;
     getContent: (contentId: any) => void;
 
 }
@@ -14,7 +16,9 @@ const ContentContext = createContext<IProp>({
     loading: false,
     contents: [],
     content: {},
-    getContents(courseId) { },
+    getContents(courseId) {
+        return courseId
+    },
     getContent(contentId) { },
 
 });
@@ -47,13 +51,39 @@ export const ContentProvider: React.FC<IProps> = ({ children }) => {
             const response = await axios.get(`${port}/contentes/${courseId}`);
             setContents(response.data)
             setLoading(false)
-
+            return contents
         } catch (error) {
             setLoading(false)
-            console.error('Error Creating Course:', error);
+            console.error('Error Creating Content', error);
             throw error;
         }
     };
+
+
+    // const getContents = async (courseId: any) => {
+    //     setLoading(true);
+    //     try {
+    //         const cachedData = await AsyncStorage.getItem(`cachedContents_${courseId}`);
+    //         if (cachedData) {
+    //             setContents(JSON.parse(cachedData));
+    //             setLoading(false);
+    //         } else {
+    //             const response = await axios.get(`${port}/contents/${courseId}`);
+    //             const contentsData = response.data;
+    //             if (!contentsData || contentsData.length === 0) {
+    //                 throw new Error('No contents found for the specified course.');
+    //             }
+    //             await AsyncStorage.setItem(`cachedContents_${courseId}`, JSON.stringify(contentsData));
+
+    //             setContents(contentsData);
+    //             setLoading(false);
+    //         }
+    //     } catch (error) {
+    //         setLoading(false);
+    //         console.error('Error Getting Contents:', error);
+    //     }
+    // };
+
 
 
     const getContent = async (contentId: string) => {

@@ -1,24 +1,25 @@
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AboutScreen } from "./components/about";
 import { LessonsScreen } from "./components/lessons";
 import { ReviewScreen } from "./components/review";
 import { IContent } from "./model";
+import { useCourseContext } from "../course/context";
+import { useContentContext } from "./context";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
 interface IProps {
     course: any,
-    contents: IContent[]
 }
-const CourseNavigatorTab = ({ course, contents }: IProps) => {
-
+const CourseNavigatorTab = ({ course }: IProps) => {
     return (
         <Tab.Navigator>
             <Tab.Screen name="About" component={AboutScreen} initialParams={{ course: course }} />
             <Tab.Screen name="Lesson" component={LessonsScreen}
-                initialParams={{ contents: contents, course: course }}
+                initialParams={{ course: course }}
             />
             <Tab.Screen name="Review" component={ReviewScreen} />
         </Tab.Navigator>

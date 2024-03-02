@@ -2,21 +2,26 @@ import axios from 'axios';
 import React, { createContext, useContext, useState } from 'react'
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { ICurrentUser } from './modal';
+
 interface IProp {
     loading: boolean;
+    userToken: any;
     user: ICurrentUser,
     signIn: (payload: any) => Promise<any>;
     signUp: (values: any) => void;
     currentUser: (userId: any) => void;
+    signOut: () => void;
 }
 const AuthContext = createContext<IProp>({
     loading: false,
+    userToken: null,
     user: null,
     signIn: (payload) => {
         return null
     },
     signUp: (values) => { },
-    currentUser: (userId) => { }
+    currentUser: (userId) => { },
+    signOut: () => { }
 });
 
 export const useAuthContext = () => {
@@ -29,16 +34,18 @@ export const useAuthContext = () => {
 
 interface IProps {
     children: React.ReactNode;
+    navigation?: any;
 }
 
-export const AuthProvider: React.FC<IProps> = ({ children }) => {
+export const AuthProvider: React.FC<IProps> = ({ children, navigation }) => {
+
     const [loading, setLoading] = useState<boolean>(false);
-    const [user, setUser] = useState<{}>({} as any);
+    const [user, setUser] = useState({} as any);
+    const [userToken, setUserToken] = useState(null)
 
 
-    const port = "https://lightboardserver.onrender.com/api"
 
-    // const port = 'http://localhost:8000/api'
+    const port = "https://lightboardserver.onrender.com/api";
 
     const signIn = async (payload: any) => {
         setLoading(true)
@@ -46,9 +53,12 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
         try {
             const response = await axios.post(`${port}/auth/students`, payload);
             await AsyncStorage.setItem('user', JSON.stringify(response.data));
-            setUser(response.data)
-            console.log(response.data)
-            setLoading(false)
+            setUser(response.data);
+            setUserToken(response.data.jwt)
+            console.log(response.data.jwt)
+            setLoading(false);
+
+            return userToken
 
         } catch (error) {
             setLoading(false)
@@ -84,7 +94,10 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
         try {
             await AsyncStorage.removeItem('user');
             setUser(null);
+            setUserToken(null)
             setLoading(false);
+            return userToken;
+
         } catch (error) {
             setLoading(false);
             console.error('Error signing out:', error);
@@ -95,7 +108,7 @@ export const AuthProvider: React.FC<IProps> = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ loading, user, signIn, signUp, currentUser, }}>
+            value={{ loading, user, signIn, signUp, currentUser, signOut, userToken }}>
             {children}
 
         </AuthContext.Provider>

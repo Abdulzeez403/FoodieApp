@@ -1,45 +1,59 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TouchableOpacity, StyleSheet, Animated, SafeAreaView, PanResponder, useWindowDimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, SafeAreaView, useWindowDimensions, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import { useCourseContext } from './context';
 import { ApBackButton, ApHeader } from '../../components/header';
+import { ApLoader } from '../../components/loader';
 import MyCourseNavigatorTab from './MyCourseNavigator';
-import { OngoingScreen } from './components/ongoing';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CourseItem } from './components/courseItem';
+import { useNavigation } from '@react-navigation/native';
 
-const CourseScreen = ({ navigation }) => {
-    const { getCourses, courses } = useCourseContext();
-    const { width } = useWindowDimensions()
+const CourseScreen = () => {
+    const { fetchEnrolledCourses, enrolledCourses, loading } = useCourseContext();
 
-    const [refreshing, setRefreshing] = useState(false);
-    const [data, setData] = useState(courses);
+    const navigation = useNavigation()
 
     useEffect(() => {
-        fetchData();
+        fetchEnrolledCoursess()
+
     }, []);
 
-    const fetchData = async () => {
-        try {
-            setRefreshing(true);
-            const newData = await getCourses();
-            setData(newData as any);
-        } catch (error) {
-            console.error('Error fetching courses:', error);
-        } finally {
-            setRefreshing(false);
+    const fetchEnrolledCoursess = async () => {
+        const userData = await AsyncStorage.getItem('user');
+        if (!userData) {
+            throw new Error('User data not found'); // Handle missing user data
         }
-    };
-
-    const onRefresh = () => {
-        fetchData();
-    };
-
-
+        const parsedUserData = JSON.parse(userData);
+        fetchEnrolledCourses(parsedUserData?._id)
+    }
 
     return (
-        <SafeAreaView style={{ width: width }}>
+        <View >
             <ApHeader title="My Course" left={<ApBackButton />} />
 
-            <MyCourseNavigatorTab courses={courses} onRefresh={onRefresh} refreshing={refreshing} />
-        </SafeAreaView>
+            {loading ? (
+                <View>
+                    <ApLoader />
+                </View>
+            ) : (
+                <View>
+                    {<FlatList
+                        data={enrolledCourses}
+                        keyExtractor={(item) => item._id}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => navigation.navigate("ContentLists", { item: item?.courseId?._id })}>
+                                <CourseItem course={item} />
+                            </TouchableOpacity>
+                        )}
+                    />}
+                </View>
+            )
+
+            }
+
+
+
+        </View>
     );
 };
 

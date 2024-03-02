@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import { ApIcon } from '../../../components/icon'
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 
 
 interface Props {
@@ -9,10 +9,11 @@ interface Props {
 }
 
 export const CourseItem = ({ course }: Props) => {
+    const item = course.courseId;
     return (
-        <View style={{ flexDirection: "row", gap: 20, marginVertical: 4, alignItems: "center" }} className='shadow-md shadow-slate-300  p-3 rounded-md pt-6' >
+        <View style={{ flexDirection: "row", gap: 20, marginVertical: 4, alignItems: "center" }} className='shadow-md shadow-slate-300  p-3 rounded-md pt-6 mx-3' >
             <View >
-                <Image source={{ uri: course?.images?.[0]?.uri }}
+                <Image source={{ uri: item?.images?.[0]?.uri }}
                     resizeMode="cover"
                     style={{ width: 110, backgroundColor: "black", height: 110, borderRadius: 10 }} />
             </View>
@@ -29,7 +30,7 @@ export const CourseItem = ({ course }: Props) => {
                         <View style={{ flexDirection: "row", gap: 8 }}>
                             <ApIcon type="MaterialIcons" name="timer" size={20} color="red" />
                             <View>
-                                <Text>{course?.time?.hour}hr {course?.time?.minute}min, {course?.time?.second}sec</Text>
+                                <Text>{item?.time?.hour}hr {item?.time?.minute}min, {course?.time?.second}sec</Text>
                             </View>
                         </View>
 
@@ -37,14 +38,14 @@ export const CourseItem = ({ course }: Props) => {
 
                 </View>
                 <Text className='font-semibold text-lg'>
-                    {course?.title}
+                    {item?.title}
                 </Text>
                 <Text>
-                    <Text className='text-red-400'>Instructor:</Text> {course?.instructor}
+                    <Text className='text-red-400'>Instructor:</Text> {item?.instructor}
                 </Text>
-                <View className='my-2'>
+                {/* <View className='my-2'>
                     <Progress.Bar progress={0.8} width={180} />
-                </View>
+                </View> */}
             </View>
         </View>
     )

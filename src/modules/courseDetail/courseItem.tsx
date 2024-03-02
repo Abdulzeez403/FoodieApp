@@ -52,7 +52,6 @@ export const CourseDetailComponent = ({ course }: IProps) => {
 };
 const styles = StyleSheet.create({
     courseContainer: {
-        // width: 260,
         elevation: 2, // Android shadow
         shadowColor: '#000', // iOS shadow
         shadowOffset: { width: 0, height: 1 },

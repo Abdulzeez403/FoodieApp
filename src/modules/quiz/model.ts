@@ -1,6 +1,7 @@
-export interface IQuiz {
+interface Question {
   _id: string;
   question: string;
-  answer?: string;
-  options: [string];
+  options: string[];
+  answer: string;
+  quizId: string;
 }

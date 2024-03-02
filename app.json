@@ -20,10 +20,24 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sodiqabdulazeez.lightBoard"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0b787388-2ce2-4969-b68e-2a2934d4b3da"
+      }
+    },
+     "plugins": [
+      [
+        "expo-updates",
+        {
+          "username": "sodiqabdulazeez"
+        }
+      ]
+    ]
   }
 }

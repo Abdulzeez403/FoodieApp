@@ -1,21 +1,23 @@
-import { StyleSheet, Text, View, TouchableOpacity, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ToastAndroid, useWindowDimensions, Image } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ApTitle from '../../../components/topography/title';
 import ApTextInput from '../../../components/input';
 import { Formik, FormikProps } from 'formik';
 import { ApButton } from '../../../components';
 import ApSubtitle from '../../../components/topography/subtitle';
 import { useAuthContext } from '../../../context';
+import { theme } from '../../../constants/theme';
 
-const SigninScreen = ({ navigation }) => {
-    const { loading, signIn } = useAuthContext();
+
+const SignInScreen = ({ navigation }) => {
+    const { loading, signIn, user } = useAuthContext();
+    const { width } = useWindowDimensions()
+
 
     const handleSubmit = async (payload: any) => {
         try {
             await signIn(payload);
-            ToastAndroid.show('You are welcome', ToastAndroid.SHORT);
-            navigation.navigate('MainStack');
+            // navigation.navigate(theme.screens.HomeScreen)
         } catch (error) {
             console.error(error);
         }
@@ -24,7 +26,10 @@ const SigninScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.contentContainer}>
-                <ApTitle>Sign In</ApTitle>
+                {/* <View style={{ width: 50, height: 50 }}>
+                    <Image source={require("../../../../assets/LB.png")} />
+                </View> */}
+                <Text className='text-center text-lg font-bold'>Sign In</Text>
                 <ApSubtitle>Welcome to LightBoard</ApSubtitle>
                 <Formik
                     style={styles.formContainer}
@@ -47,7 +52,8 @@ const SigninScreen = ({ navigation }) => {
                                 formikProps={props}
                             />
 
-                            <View style={styles.buttonContainer}>
+                            <View className='my-2'
+                                style={{ width: width, paddingHorizontal: 20 }}>
                                 <ApButton
                                     label={loading ? 'Loading...' : 'Sign In'}
                                     type="primary"
@@ -56,7 +62,7 @@ const SigninScreen = ({ navigation }) => {
                                 />
                             </View>
                             <View>
-                                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                                <TouchableOpacity onPress={() => navigation.navigate(theme.screens.SignUpScreen)}>
                                     <Text style={styles.textLink}>
                                         Don't have an account yet?
                                     </Text>
@@ -66,6 +72,8 @@ const SigninScreen = ({ navigation }) => {
                     )}
                 </Formik>
             </View>
+
+
         </SafeAreaView>
     );
 };
@@ -74,7 +82,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        paddingHorizontal: 16,
+        // paddingHorizontal: 16,
     },
     contentContainer: {
         width: '100%',
@@ -91,4 +99,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SigninScreen;
+export default SignInScreen;

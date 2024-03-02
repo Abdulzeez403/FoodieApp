@@ -1,18 +1,35 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react'
 import { theme } from "../../constants/theme"
 import { ApBackButton, ApHeader } from '../../components/header'
 import RoundedImage from '../../components/image/avatar'
 import { ApIcon } from '../../components/icon'
-import CourseNavigatorTab from '../courseDetail/courseNavigator'
+import { useAuthContext } from '../../context'
+import { ApButton } from '../../components'
 
 
 interface IProps {
-    icon: React.ReactNode;
-    title?: string;
-};
+    icon: React.ReactNode, title: string
+}
 
-const ProfileScreen = () => {
+
+
+const ProfileScreen = ({ navigation }) => {
+    const { signOut, user } = useAuthContext();
+
+
+
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            // navigation.navigate(theme.screens.SigninScreen);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
+
     const ProfileList = ({ icon, title }: IProps) => (
         <View className="p-8 shadow-lg shadow-slate-400 rounded-md flex justify-center items-center" style={{ width: 170, height: 170 }}>
             <View className='text-center bg-blue-200 p-4 rounded-full'>
@@ -24,6 +41,8 @@ const ProfileScreen = () => {
 
         </View>
     )
+
+
     return (
         <SafeAreaView style={styles.container}>
             <ApHeader title='Profile' left={<ApBackButton />} />
@@ -54,7 +73,6 @@ const ProfileScreen = () => {
                             size={32}
                             name="fact-check"
                             type="MaterialIcons"
-                            // onPress={}
                             color="white"
                         />} title="Attendances" />
                     </View>
@@ -65,7 +83,7 @@ const ProfileScreen = () => {
                             type="AntDesign"
                             color="white"
 
-                        // onPress={}
+                        // onPress={navigation.navigate("Result")}
                         />} title="Results" />
 
                         <ProfileList icon={<ApIcon
@@ -78,6 +96,15 @@ const ProfileScreen = () => {
                         />} title="Home Works" />
                     </View>
                 </View>
+
+                <View>
+                    <ApButton
+                        onPress={handleSignOut}
+                        label="SignOut"
+                    />
+                </View>
+
+
 
             </View>
         </SafeAreaView>

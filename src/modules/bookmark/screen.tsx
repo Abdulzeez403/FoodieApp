@@ -5,6 +5,7 @@ import { CourseItem } from './components/courseLists'
 import { useNavigation } from '@react-navigation/native'
 import { useCourseContext } from '../course/context'
 import { ApIcon } from '../../components/icon'
+import { ApLoader } from '../../components/loader'
 
 type Props = {}
 
@@ -40,7 +41,7 @@ const BookMarkscreen = (props: Props) => {
 
     ];
 
-    const { getCourses, courses } = useCourseContext();
+    const { getCourses, courses, loading } = useCourseContext();
 
     useEffect(() => {
         getCourses()
@@ -73,22 +74,27 @@ const BookMarkscreen = (props: Props) => {
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item }) => <RenderItem item={item} />}
                 />
-                <View style={{ margin: 4 }}>
-                    <FlatList
-                        nestedScrollEnabled={true}
-                        scrollEnabled={false}
-                        data={courses}
-                        keyExtractor={(item) => item?.id}
-                        horizontal={false}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({ item: course, index }) => (
-                            <TouchableOpacity key={index} onPress={() => navigation.navigate("CourseDetail", { course })}>
-                                <CourseItem course={course} />
-                            </TouchableOpacity>
-                        )}
-                    // {...panResponder.panHandlers}
-                    />
-                </View>
+                {loading ? (
+                    <View>
+                        <ApLoader />
+                    </View>
+                ) : (
+                    <View style={{ margin: 4 }}>
+                        <FlatList
+                            nestedScrollEnabled={true}
+                            scrollEnabled={false}
+                            data={courses}
+                            keyExtractor={(item) => item?.id}
+                            horizontal={false}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({ item: course, index }) => (
+                                <TouchableOpacity key={index} onPress={() => navigation.navigate("CourseDetail", { course })}>
+                                    <CourseItem course={course} />
+                                </TouchableOpacity>
+                            )}
+                        // {...panResponder.panHandlers}
+                        />
+                    </View>)}
             </ScrollView>
 
 

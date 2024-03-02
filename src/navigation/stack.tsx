@@ -1,10 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from "@react-navigation/native";
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { screens } from '../modules/index';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import QuizScreen from '../modules/quiz/screen';
 import ContentScreen from '../modules/lesson/screen';
+import TabNavigator from '../navigation/mainTab'
+import ContentListsScreen from "../modules/contentLists/screen"
+import HomeScreen from "../modules/home/screen"
+import { theme } from '../constants/theme';
+import { useAuthContext } from '../context';
+
 
 export type RootStackParamList = {
     Home: undefined;
@@ -20,120 +24,51 @@ export type RootStackParamList = {
     CourseStack: undefined;
     ContentScreen: undefined;
     QuizScreen: undefined;
+    ContentLists: undefined;
 }
 
-// const Stack = createNativeStackNavigator(RootStackParamList)();
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-
-
-const AuthStack = () => (
-    <Stack.Navigator initialRouteName="OnBoarding">
-        <Stack.Screen name="OnBoarding" component={screens.OnBoardingScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SignUp" component={screens.SignupScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" component={screens.SigninScreen} options={{ headerShown: false }} />
-    </Stack.Navigator>
-);
-// const CourseStack = () => (
-//     <Stack.Navigator initialRouteName="Course">
-//         <Stack.Screen name="Course" component={screens.CourseScreen} options={{ headerShown: false }} />
-//         <Stack.Screen name="CourseDetail" component={screens.CourseDetailScreen} options={{ headerShown: false }} />
-//     </Stack.Navigator>
-// );
-
-const MainStack = () => (
-    <Stack.Navigator initialRouteName="TabNavigator">
-        <Stack.Screen
-            name={"TabNavigator"} component={screens.TabNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={screens.HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Profile" component={screens.ProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Course" component={screens.CourseScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CourseDetail" component={screens.CourseDetailScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="QuizScreen" component={QuizScreen} />
-        <Stack.Screen name="ContentScreen" component={ContentScreen} />
-    </Stack.Navigator>
-);
-
-
+const Stack = createNativeStackNavigator();
 
 const ScreensStack = () => {
-    const [current, setCurrent] = useState()
-    useEffect(() => {
-        const currentUser = AsyncStorage.getItem('user');
-        setCurrent(currentUser as any)
-        console.log(currentUser)
-    }, [])
-
+    const { userToken } = useAuthContext()
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {current ? (
-                    <Stack.Screen name="MainStack" component={MainStack} />
+        <Stack.Navigator initialRouteName={userToken ? "TabNavigator" : "OnBoarding"}
+            screenOptions={{ header: () => null }}>
 
-                ) : (
-                    <Stack.Screen name="AuthStack" component={AuthStack} />
+            {userToken ? (
 
-                )}
-            </Stack.Navigator>
-        </NavigationContainer>
+                <Stack.Group>
+                    <Stack.Screen name={"Home"} component={HomeScreen} options={{ headerShown: false }} />
+                    <Stack.Screen
+                        name={"TabNavigator"} component={TabNavigator} options={{ headerShown: false }} />
+
+                    <Stack.Screen name="Profile" component={screens.ProfileScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="Course" component={screens.CourseScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="CourseDetail" component={screens.CourseDetailScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="QuizScreen" component={QuizScreen} />
+                    <Stack.Screen name="ContentScreen" component={ContentScreen} />
+                    <Stack.Screen name="ContentLists" component={ContentListsScreen} />
+
+                    <Stack.Screen name="BookMark" component={screens.BookMarkScreen} />
+
+                    <Stack.Screen name="Result" component={screens.ResultScreen} />
+                </Stack.Group>
+
+            ) : (
+                <Stack.Group>
+                    <Stack.Screen name="OnBoarding" component={screens.OnBoardingScreen} options={{ headerShown: false }} />
+
+                    <Stack.Screen name="SignIn" component={screens.SignInScreen} options={{ headerShown: false }} />
+
+                    <Stack.Screen name="SignUp" component={screens.SignUpScreen} options={{ headerShown: false }} />
+
+
+                </Stack.Group>
+            )}
+        </Stack.Navigator>
     )
 
 };
-// function ScreensStack() {
-//     return (
-//         <NavigationContainer>
-//             <Stack.Navigator
-//             // initialRouteName={theme.screens.SigninScreen}
-//             >
-//                 <Stack.Screen
-//                     name={"TabNavigator"}
-//                     component={screens.TabNavigator}
-//                     options={{ headerShown: false }}
-//                 />
-//                 <Stack.Screen
-//                     name="OnBoarding"
-//                     component={screens.OnBoardingScreen}
-//                     options={{ headerShown: false }}
-//                 />
-//                 <Stack.Screen
-//                     name="SignUp"
-//                     component={screens.SignupScreen}
-//                     options={{ headerShown: false }}
-//                 />
-//                 <Stack.Screen
-//                     name="SignIn"
-//                     component={screens.SigninScreen}
-//                     options={{ headerShown: false }}
-//                 />
 
-//                 <Stack.Screen
-//                     name="Home"
-//                     component={screens.HomeScreen}
-//                     options={{ headerShown: false }}
-//                 />
-
-//                 <Stack.Screen
-//                     name="Profile"
-//                     component={screens.ProfileScreen}
-//                     options={{ headerShown: false }}
-//                 />
-//                 <Stack.Screen
-//                     name="Course"
-//                     component={screens.CourseScreen}
-//                     options={{ headerShown: false }}
-//                 />
-//                 <Stack.Screen
-//                     name="CourseDetail"
-//                     component={screens.CourseDetailScreen}
-//                     options={{ headerShown: false }}
-//                 />
-
-
-
-
-//             </Stack.Navigator>
-//         </NavigationContainer>
-//     );
-// }
 export default ScreensStack;

@@ -46,12 +46,11 @@ export const LessonProvider: React.FC<IProps> = ({ children }) => {
         try {
             const response = await axios.get(`${port}/lessons/${contentId}`);
             setLessons(response.data)
-            console.log(response.data)
             setLoading(false)
 
         } catch (error) {
             setLoading(false)
-            console.error('Error getting Lessons:', error);
+            console.error('Error getting Lessons....:', error);
             throw error;
         }
     };
@@ -62,7 +61,6 @@ export const LessonProvider: React.FC<IProps> = ({ children }) => {
         try {
             const response = await axios.get(`${port}/lesson/${lessonId}`);
             setLesson(response.data)
-            console.log(response.data)
             setLoading(false)
 
         } catch (error) {

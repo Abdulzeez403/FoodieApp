@@ -9,28 +9,29 @@ import { ApButton } from '../../components';
 import { theme } from "../../constants/theme"
 import { useQuizContext } from './context';
 import RenderItem from '../Onboard/components/RenderItem';
+import { ApLoader } from '../../components/loader';
 
-
-interface IProps {
-    course: {}
-}
 
 const QuizScreen = ({ route }) => {
-    const { getQuizs, quizs, questions, getQuestions } = useQuizContext()
-    const course = route.params.course;
+    const { questions, loading } = useQuizContext()
 
-    useEffect(() => {
-        const FetchQuiz = async () => {
-            try {
-                await getQuizs(course?._id);
-                const singleQuiz = quizs?.[0];
-                await getQuestions(singleQuiz?._id);
-            } catch (error) {
-                console.error("Error fetching quiz or questions:", error);
-            }
-        };
-        FetchQuiz();
-    }, [questions, quizs, course?._id]);
+    // const FetchQuiz = async () => {
+    //     await getQuizs(course?._id);
+    //     const singleQuiz = quizs?.[0];
+    //     if (singleQuiz) {
+    //         const quizId = singleQuiz._id;
+    //         getQuestions(quizId);
+    //         console.log(quizs, "quiz");
+    //         console.log(quizId, "...quizId");
+    //         console.log(course?._id, "...courseId");
+    //     } else {
+    //         console.log("No quiz found");
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     FetchQuiz();
+    // }, []);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const { width, height } = Dimensions.get('window');
@@ -40,7 +41,6 @@ const QuizScreen = ({ route }) => {
     const [countdownInterval, setCountdownInterval] = useState(null);
     const [totalQuestions, setTotalQuestions] = useState(questions.length);
     const [solvedQuestions, setSolvedQuestions] = useState(0);
-
     const flatListRef = useRef(null);
     const navigation = useNavigation();
 
@@ -88,42 +88,51 @@ const QuizScreen = ({ route }) => {
     };
 
     const handleOptionPress = (questionIndex, optionIndex) => {
-        setSelectedOptions((prevSelected) => {
+        setSelectedOptions(prevSelected => {
             const newSelectedOptions = [...prevSelected];
             newSelectedOptions[questionIndex] = optionIndex;
-            setCountdown((prevCountdown) => Math.max(prevCountdown - 1, 0));
+            setCountdown(prevCountdown => Math.max(prevCountdown - 1, 0));
             return newSelectedOptions;
         });
     };
 
-    const calculateScore = () => {
-        clearInterval(countdownInterval);
-        const newScore = questions.reduce((acc, question, index) => {
-            const selectedOption = selectedOptions[index];
-            const correctOption = question?.answer;
+    const CalculateScore = () => {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
 
-            if (selectedOption === correctOption) {
-                return acc + 1;
-            } else {
-                return acc;
-            }
+        const newScore = questions.reduce((acc, question, index) => {
+            const selectedOptionIndex = selectedOptions[index];
+            const correctOptionIndex = question?.options.findIndex(option => option === question.answer);
+            const isCorrect = selectedOptionIndex === correctOptionIndex;
+            return acc + (isCorrect ? 1 : 0);
         }, 0);
 
         setScore(newScore);
     };
+
+
     const RenderItem = ({ item, index }) => (
         <View style={[styles.flashcard, { width: width }]}>
+
+
             <View style={{ flexDirection: "row", gap: 15, alignItems: "center", marginBottom: 24, justifyContent: "center" }}>
                 <ApIcon
                     type="AntDesign"
                     name="close" size={15} color="black"
                     onPress={resetQuestions} />
-                <Progress.Bar progress={solvedQuestions / totalQuestions} width={270} />
-                <Text className='text-bold'>{totalQuestions}/{solvedQuestions}</Text>
+                <View>
+                    {/* <Progress.Bar progress={solvedQuestions / totalQuestions} width={270} /> */}
+                </View>
+
+                {/* <Text className='text-bold'>{totalQuestions}/{solvedQuestions}</Text> */}
 
             </View>
+
+
             <View className='shadow-lg shadow-slate-500 py-20 bg-white rounded-lg relative'>
-                <Text style={styles.question} className='text-center '>{item.question}</Text>
+                <Text style={styles.question} className='text-center '>
+                    {item?.question}</Text>
                 <View className="absolute -top-5 left-[40%] bg-white p-3 rounded-full shadow-md">
                     <View>
                         <Progress.Circle
@@ -159,9 +168,6 @@ const QuizScreen = ({ route }) => {
 
                 </TouchableOpacity>
             ))}
-
-
-
         </View>
     );
 
@@ -182,70 +188,70 @@ const QuizScreen = ({ route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <FlatList
-                ref={flatListRef}
-                data={questions}
-                horizontal
-                pagingEnabled
-                keyExtractor={(item) => item?._id}
-                renderItem={RenderItem}
-                showsHorizontalScrollIndicator={false}
-                initialScrollIndex={0}
-                getItemLayout={(data, index) => ({
-                    length: 300,
-                    offset: 460 * index,
-                    index,
-                })}
-            />
-
-            {/* {questions?.map((item, index) => (
-                <View>
-                    <RenderItem item={item} index={index} />
-                </View>
-            ))} */}
+            {loading ? (<ApLoader />) : (<View>
+                <FlatList
+                    ref={flatListRef}
+                    data={questions}
+                    horizontal
+                    pagingEnabled
+                    keyExtractor={(item) => item?._id}
+                    renderItem={({ item, index }) => <RenderItem item={item} index={index} />}
+                    showsHorizontalScrollIndicator={false}
+                    initialScrollIndex={0}
+                    getItemLayout={(data, index) => ({
+                        length: 300,
+                        offset: 460 * index,
+                        index,
+                    })}
+                />
 
 
-            {currentIndex === questions.length - 1 ? (
-                <View style={{ paddingHorizontal: 13 }}>
-                    <ApButton label="Submit"
-                        onPress={() => {
-                            calculateScore();
-                            showModal();
-
-                        }} />
-
-                </View>
-            ) : (
-                <View style={{ paddingHorizontal: 13 }}>
-                    <ApButton label="Next"
-                        onPress={() => {
-                            handleNext();
-                        }}
-                        disabled={currentIndex === questions.length - 1}
-                    />
-                </View>
 
 
-            )}
-            <ModalComponent
-                modalVisible={modal}
-                hideModal={hideModal}>
-                <View className='flex justify-center' style={{ height: height / 1 }}>
-                    <View >
-                        <View className='flex justify-center m-0 items-center '>
-                            <ApIcon
-                                type="Feather"
-                                name="check-circle" size={75} color="#1E90FF" />
-                        </View>
+                {currentIndex === questions.length - 1 ? (
+                    <View style={{ paddingHorizontal: 13 }}>
+                        <ApButton label="Submit"
+                            onPress={() => {
+                                CalculateScore();
+                                showModal();
 
-                        <Text className='text-center font-bold text-lg'>Congraducation! You score  is {score}</Text>
-                        <ApButton label='Back to Course'
-                            onPress={handlePress}
+                            }} />
+
+                    </View>
+                ) : (
+                    <View style={{ paddingHorizontal: 13 }}>
+                        <ApButton label="Next"
+                            onPress={() => {
+                                handleNext();
+                            }}
+                            disabled={currentIndex === questions.length - 1}
                         />
                     </View>
-                </View>
 
-            </ModalComponent>
+
+                )}
+                <ModalComponent
+                    modalVisible={modal}
+                    hideModal={hideModal}>
+                    <View className='flex justify-center' style={{ height: height / 1 }}>
+                        <View >
+                            <View className='flex justify-center m-0 items-center '>
+                                <ApIcon
+                                    type="Feather"
+                                    name="check-circle" size={75} color="#1E90FF" />
+                            </View>
+
+                            <Text className='text-center font-bold text-lg'>Congraducation! You score  is {score}</Text>
+                            <ApButton label='Back to Course'
+                                onPress={handlePress}
+                            />
+                        </View>
+                    </View>
+
+                </ModalComponent>
+            </View>)}
+
+
         </SafeAreaView>
     )
 }
