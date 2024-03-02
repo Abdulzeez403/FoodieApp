@@ -16,7 +16,7 @@ export const CompletedScreen = ({ route, refreshing, onRefresh }: IProps) => {
 
     const { courses } = route.params;
     return (
-        <ScrollView className='bg-white'>
+        <ScrollView className='bg-white w-96'>
             <FlatList
                 nestedScrollEnabled={true}
                 scrollEnabled={false}

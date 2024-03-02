@@ -35,11 +35,10 @@ const CourseScreen = ({ navigation }) => {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{ width: width }}>
             <ApHeader title="My Course" left={<ApBackButton />} />
-            <View style={styles.courseView}>
-                <MyCourseNavigatorTab courses={courses} onRefresh={onRefresh} refreshing={refreshing} />
-            </View>
+
+            <MyCourseNavigatorTab courses={courses} onRefresh={onRefresh} refreshing={refreshing} />
         </SafeAreaView>
     );
 };
@@ -48,7 +47,8 @@ export default CourseScreen;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+
+        // flex: 1,
         // justifyContent: 'center',
         // alignItems: 'center',
         // marginVertical: 20,
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
     },
     courseView: {
         flex: 1,
-        width: '90%', // 90% of the screen width
+        // width: '90%', // 90% of the screen width
     },
 });

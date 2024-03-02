@@ -30,7 +30,7 @@ export const OngoingScreen = ({ route, refreshing, onRefresh, }: IProps) => {
     ).current;
 
     return (
-        <ScrollView className='bg-white'>
+        <ScrollView className='bg-white w-96'>
 
             <FlatList
                 nestedScrollEnabled={true}
@@ -57,6 +57,6 @@ export const OngoingScreen = ({ route, refreshing, onRefresh, }: IProps) => {
 const styles = StyleSheet.create({
     courseView: {
         flex: 1,
-        width: '90%', // 90% of the screen width
+        // width: '90%', // 90% of the screen width
     },
 });
